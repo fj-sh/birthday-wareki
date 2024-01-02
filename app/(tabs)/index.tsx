@@ -2,11 +2,43 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import EditScreenInfo from '../../components/EditScreenInfo';
 import { Text, View } from '../../components/Themed';
-import { getPermissionsAsync, useNotifications } from '../../hooks/useNotifications';
+import {
+  getPermissionsAsync,
+  requestDeniedPermissions,
+  requestInitPermissions,
+  scheduleNotification,
+  useNotifications,
+} from '../../hooks/useNotifications';
+import type {
+  NotificationContentInput,
+  NotificationTriggerInput,
+} from 'expo-notifications/src/Notifications.types';
 
 export default function TabOneScreen() {
   const onRequest = async () => {
-    await getPermissionsAsync();
+    const status = await getPermissionsAsync();
+
+    let permissionStatus = status;
+    if (permissionStatus !== 'granted') {
+      permissionStatus = await requestInitPermissions();
+    }
+
+    if (permissionStatus !== 'granted') {
+      await requestDeniedPermissions(permissionStatus);
+    }
+  };
+
+  const sendNotification = async () => {
+    const content: NotificationContentInput = {
+      title: 'Hello',
+      body: 'World',
+      badge: 2,
+    };
+    const trigger: NotificationTriggerInput = {
+      seconds: 10,
+    };
+
+    await scheduleNotification(content, trigger);
   };
   useNotifications();
   return (
@@ -15,6 +47,10 @@ export default function TabOneScreen() {
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
       <TouchableOpacity onPress={onRequest}>
         <Text>Push通知の許可を求める</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={sendNotification}>
+        <Text>Push通知を送る</Text>
       </TouchableOpacity>
       <EditScreenInfo path="app/(tabs)/index.tsx" />
     </View>
