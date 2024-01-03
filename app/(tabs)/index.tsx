@@ -13,6 +13,8 @@ import type {
   NotificationContentInput,
   NotificationTriggerInput,
 } from 'expo-notifications/src/Notifications.types';
+import { AddIcon, Box, Fab, FabIcon, FabLabel } from '@gluestack-ui/themed';
+import { i18n, translate } from '../../lib/i18n/i18n';
 
 export default function TabOneScreen() {
   const onRequest = async () => {
@@ -53,6 +55,17 @@ export default function TabOneScreen() {
         <Text>Push通知を送る</Text>
       </TouchableOpacity>
       <EditScreenInfo path="app/(tabs)/index.tsx" />
+
+      <Fab
+        size="md"
+        placement="bottom right"
+        isHovered={false}
+        isDisabled={false}
+        isPressed={false}
+      >
+        <FabIcon as={AddIcon} mr="$1" />
+        <FabLabel>{translate('friendList.addFriend')}</FabLabel>
+      </Fab>
     </View>
   );
 }

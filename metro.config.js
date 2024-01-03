@@ -7,4 +7,7 @@ const config = getDefaultConfig(__dirname, {
   isCSSEnabled: true,
 });
 
+// Adds support for `mjs` files
+config.resolver.sourceExts.push('mjs');
+
 module.exports = config;
