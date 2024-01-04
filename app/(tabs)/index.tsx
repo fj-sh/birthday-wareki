@@ -1,7 +1,3 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
 import {
   getPermissionsAsync,
   requestDeniedPermissions,
@@ -13,8 +9,8 @@ import type {
   NotificationContentInput,
   NotificationTriggerInput,
 } from 'expo-notifications/src/Notifications.types';
-import { AddIcon, Box, Fab, FabIcon, FabLabel } from '@gluestack-ui/themed';
-import { i18n, translate } from '../../lib/i18n/i18n';
+
+import { FriendListScreen } from '../../components/screens/FriendListScreen';
 
 export default function TabOneScreen() {
   const onRequest = async () => {
@@ -43,46 +39,5 @@ export default function TabOneScreen() {
     await scheduleNotification(content, trigger);
   };
   useNotifications();
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <TouchableOpacity onPress={onRequest}>
-        <Text>Push通知の許可を求める</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={sendNotification}>
-        <Text>Push通知を送る</Text>
-      </TouchableOpacity>
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
-
-      <Fab
-        size="md"
-        placement="bottom right"
-        isHovered={false}
-        isDisabled={false}
-        isPressed={false}
-      >
-        <FabIcon as={AddIcon} mr="$1" />
-        <FabLabel>{translate('friendList.addFriend')}</FabLabel>
-      </Fab>
-    </View>
-  );
+  return <FriendListScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
