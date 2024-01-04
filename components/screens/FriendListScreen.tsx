@@ -1,13 +1,12 @@
 import Animated, { useSharedValue } from 'react-native-reanimated';
 import { data, type HeaderListItem, isHeader, type ListItem } from '../../constants/sample';
 import { useHeaderStyle } from '../../hooks/useHeaderStyle';
-import { useCallback, useRef } from 'react';
-import { FlatList, SafeAreaView, Text, StyleSheet } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { FlatList, SafeAreaView, Text, StyleSheet, TextInput, View } from 'react-native';
 import { useHeaderLayout } from '../../hooks/useHeaderLayout';
 import { MeasureableAnimatedView } from '../MeasureableAnimatedView';
 import { SectionListItem } from '../SectionListItem';
-import { AddIcon, Fab, FabIcon, FabLabel } from '@gluestack-ui/themed';
-import { translate } from '../../lib/i18n/i18n';
+import { EvilIcons } from '@expo/vector-icons';
 
 const HeaderHeight = 65;
 const ItemHeight = 50;
@@ -15,6 +14,7 @@ const ItemHeight = 50;
 const headers = data.filter(isHeader) as HeaderListItem[];
 
 const FriendListScreen = () => {
+  const [searchText, setSearchText] = useState('');
   const contentOffsetY = useSharedValue(0);
   // Where the magic happens :)
   const { headerRefs, headersLayoutX, headersLayoutY } = useHeaderLayout({
@@ -38,9 +38,22 @@ const FriendListScreen = () => {
       index: headerIndex,
     });
   }, []);
+
+  const onChangeSearchText = useCallback((value: string) => {
+    setSearchText(value);
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <>
+        <View style={styles.textInputContainer}>
+          <EvilIcons name="search" size={24} color="#BDBDBD" style={styles.icon} />
+          <TextInput
+            style={styles.textInput}
+            onEndEditing={(e) => {
+              onChangeSearchText(e.nativeEvent.text);
+            }}
+          />
+        </View>
         {/* Animated Header Section */}
         <Animated.View style={[{ flexDirection: 'row' }, rHeaderListStyle]}>
           {headers.map(({ header }, index) => {
@@ -88,16 +101,6 @@ const FriendListScreen = () => {
           );
         }}
       />
-      <Fab
-        size="md"
-        placement="bottom right"
-        isHovered={false}
-        isDisabled={false}
-        isPressed={false}
-      >
-        <FabIcon as={AddIcon} mr="$1" />
-        <FabLabel>{translate('friendList.addFriend')}</FabLabel>
-      </Fab>
     </SafeAreaView>
   );
 };
@@ -106,6 +109,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  textInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#E0E0E0',
+    borderWidth: 0.5,
+    borderRadius: 5,
+    marginVertical: 6,
+    marginHorizontal: 10,
+    backgroundColor: '#F5F5F5',
+  },
+  icon: {
+    marginLeft: 10,
+    marginRight: 5,
+  },
+  textInput: {
+    height: 30,
+    fontSize: 16,
+    width: '95%',
+
+    marginVertical: 6,
+    paddingHorizontal: 4,
+    borderRadius: 5,
+    backgroundColor: '#F5F5F5',
+    flex: 1,
   },
 });
 

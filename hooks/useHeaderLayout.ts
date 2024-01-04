@@ -34,7 +34,6 @@ const useHeaderLayout = ({ headers, data, itemHeight, headerHeight }: UseHeaderL
       const ref = headersLayoutXRefs[i];
       if (
         ref &&
-        _WORKLET &&
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ((acc as any)?.[header] == null || (acc as any)?.[header]?.width === 0)
       ) {
@@ -53,7 +52,7 @@ const useHeaderLayout = ({ headers, data, itemHeight, headerHeight }: UseHeaderL
   const headersLayoutXData = useDerivedValue(() => {
     'worklet';
 
-    const parsedHeaderData = Object.keys(headersLayoutX.value)
+    const parsedHeaderData = Object.keys(headersLayoutX.value as Record<string, LayoutRectangle>)
       .map((key) => ({
         header: key,
         value: headersLayoutX.value[key],

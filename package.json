@@ -14,9 +14,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
-    "@gluestack-style/react": "^1.0.30",
-    "@gluestack-ui/config": "^1.0.10",
-    "@gluestack-ui/themed": "^1.0.33",
     "@react-navigation/native": "^6.0.2",
     "expo": "~49.0.18",
     "expo-font": "~11.4.0",
