@@ -39,5 +39,6 @@ export default function TabOneScreen() {
     await scheduleNotification(content, trigger);
   };
   useNotifications();
+
   return <FriendListScreen />;
 }

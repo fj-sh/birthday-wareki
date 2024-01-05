@@ -1,4 +1,4 @@
-import Animated, { useSharedValue } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { data, type HeaderListItem, isHeader, type ListItem } from '../../constants/sample';
 import { useHeaderStyle } from '../../hooks/useHeaderStyle';
 import { useCallback, useRef, useState } from 'react';
@@ -7,6 +7,9 @@ import { useHeaderLayout } from '../../hooks/useHeaderLayout';
 import { MeasureableAnimatedView } from '../MeasureableAnimatedView';
 import { SectionListItem } from '../SectionListItem';
 import { EvilIcons } from '@expo/vector-icons';
+import { BottomFloatingButton } from '../UIParts/FloatingButton';
+import { Palette } from '../../constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const HeaderHeight = 65;
 const ItemHeight = 50;
@@ -16,6 +19,7 @@ const headers = data.filter(isHeader) as HeaderListItem[];
 const FriendListScreen = () => {
   const [searchText, setSearchText] = useState('');
   const contentOffsetY = useSharedValue(0);
+
   // Where the magic happens :)
   const { headerRefs, headersLayoutX, headersLayoutY } = useHeaderLayout({
     headers,
@@ -42,6 +46,24 @@ const FriendListScreen = () => {
   const onChangeSearchText = useCallback((value: string) => {
     setSearchText(value);
   }, []);
+
+  const { bottom: safeBottom } = useSafeAreaInsets();
+  const isActive = useSharedValue(false);
+  const floatingProgress = useSharedValue(0);
+
+  // Define the animated style for the floating action button
+  const rFloatingActionStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: withSpring(isActive.value ? 1 : 0, {
+            overshootClamping: true,
+          }),
+        },
+      ],
+    };
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <>
@@ -89,6 +111,12 @@ const FriendListScreen = () => {
         onScroll={(e) => {
           contentOffsetY.value = e.nativeEvent.contentOffset.y;
         }}
+        onMomentumScrollBegin={() => {
+          isActive.value = false;
+        }}
+        onMomentumScrollEnd={() => {
+          isActive.value = true;
+        }}
         ref={flatlistRef}
         scrollEventThrottle={16}
         data={data}
@@ -100,6 +128,24 @@ const FriendListScreen = () => {
             <SectionListItem item={item} height={isHeader(item) ? HeaderHeight : ItemHeight} />
           );
         }}
+      />
+      <BottomFloatingButton
+        onSelect={(item) => {
+          console.log('onSelect');
+        }}
+        style={[
+          {
+            position: 'absolute',
+            bottom: safeBottom / 2,
+            right: 16,
+            height: 64,
+            aspectRatio: 1,
+            backgroundColor: Palette.primary,
+            borderRadius: 32,
+          },
+          rFloatingActionStyle,
+        ]}
+        progress={floatingProgress}
       />
     </SafeAreaView>
   );
