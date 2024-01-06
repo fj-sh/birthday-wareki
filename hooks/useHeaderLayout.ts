@@ -52,7 +52,7 @@ const useHeaderLayout = ({ headers, data, itemHeight, headerHeight }: UseHeaderL
   const headersLayoutXData = useDerivedValue(() => {
     'worklet';
 
-    const parsedHeaderData = Object.keys(headersLayoutX.value as Record<string, LayoutRectangle>)
+    const parsedHeaderData = Object.keys(headersLayoutX.value)
       .map((key) => ({
         header: key,
         value: headersLayoutX.value[key],

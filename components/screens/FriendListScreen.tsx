@@ -10,6 +10,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { BottomFloatingButton } from '../UIParts/FloatingButton';
 import { Palette } from '../../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
 const HeaderHeight = 65;
 const ItemHeight = 50;
@@ -19,6 +20,9 @@ const headers = data.filter(isHeader) as HeaderListItem[];
 const FriendListScreen = () => {
   const [searchText, setSearchText] = useState('');
   const contentOffsetY = useSharedValue(0);
+  const { bottom: safeBottom } = useSafeAreaInsets();
+  const isScrolling = useSharedValue(false);
+  const router = useRouter();
 
   // Where the magic happens :)
   const { headerRefs, headersLayoutX, headersLayoutY } = useHeaderLayout({
@@ -47,21 +51,22 @@ const FriendListScreen = () => {
     setSearchText(value);
   }, []);
 
-  const { bottom: safeBottom } = useSafeAreaInsets();
-  const isActive = useSharedValue(false);
-  const floatingProgress = useSharedValue(0);
-
   // Define the animated style for the floating action button
   const rFloatingActionStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          scale: withSpring(isActive.value ? 1 : 0, {
+          scale: withSpring(isScrolling.value ? 0 : 1, {
             overshootClamping: true,
           }),
         },
       ],
     };
+  }, []);
+
+  const onAddButtonPress = useCallback(() => {
+    console.log('onAddButtonPress');
+    router.push('/(tabs)/two');
   }, []);
 
   return (
@@ -112,10 +117,10 @@ const FriendListScreen = () => {
           contentOffsetY.value = e.nativeEvent.contentOffset.y;
         }}
         onMomentumScrollBegin={() => {
-          isActive.value = false;
+          isScrolling.value = true;
         }}
         onMomentumScrollEnd={() => {
-          isActive.value = true;
+          isScrolling.value = false;
         }}
         ref={flatlistRef}
         scrollEventThrottle={16}
@@ -130,9 +135,7 @@ const FriendListScreen = () => {
         }}
       />
       <BottomFloatingButton
-        onSelect={(item) => {
-          console.log('onSelect');
-        }}
+        onSelect={onAddButtonPress}
         style={[
           {
             position: 'absolute',
@@ -145,7 +148,6 @@ const FriendListScreen = () => {
           },
           rFloatingActionStyle,
         ]}
-        progress={floatingProgress}
       />
     </SafeAreaView>
   );

@@ -6,11 +6,23 @@ export const i18n = new I18n({
   en: {
     friendList: {
       addFriend: 'Add Friend',
+      title: 'Friend List',
+    },
+    register: {
+      add: 'Add Friend',
+      edit: 'Edit Friend',
+      save: 'Save',
     },
   },
   ja: {
     friendList: {
       addFriend: '友達を追加',
+      title: '友達一覧',
+    },
+    register: {
+      add: '友達を追加',
+      edit: '友達を編集',
+      save: '保存',
     },
   },
 });
