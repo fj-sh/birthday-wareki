@@ -66,7 +66,7 @@ const FriendListScreen = () => {
 
   const onAddButtonPress = useCallback(() => {
     console.log('onAddButtonPress');
-    router.push('/(tabs)/two');
+    router.push('/(tabs)/register');
   }, []);
 
   return (

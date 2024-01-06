@@ -12,7 +12,7 @@ import type {
 
 import { FriendListScreen } from '../../components/screens/FriendListScreen';
 
-export default function TabOneScreen() {
+export default function InitPage() {
   const onRequest = async () => {
     const status = await getPermissionsAsync();
 

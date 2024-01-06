@@ -4,24 +4,24 @@ import { I18n } from 'i18n-js';
 type TranslationKeys = 'friendList.addFriend';
 export const i18n = new I18n({
   en: {
-    friendList: {
-      addFriend: 'Add Friend',
-      title: 'Friend List',
+    birthdayList: {
+      addBirthday: 'Add Birthday',
+      title: 'Birthday List',
     },
     register: {
-      add: 'Add Friend',
-      edit: 'Edit Friend',
+      add: 'Add Birthday',
+      edit: 'Edit Birthday',
       save: 'Save',
     },
   },
   ja: {
-    friendList: {
-      addFriend: '友達を追加',
-      title: '友達一覧',
+    birthdayList: {
+      addBirthday: '誕生日を追加',
+      title: '誕生日一覧',
     },
     register: {
-      add: '友達を追加',
-      edit: '友達を編集',
+      add: '誕生日を追加',
+      edit: '誕生日を編集',
       save: '保存',
     },
   },

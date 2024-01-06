@@ -1,10 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Stack, useRouter } from 'expo-router';
-import { Button, Pressable, useColorScheme, Text } from 'react-native';
+import { Button, Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import { i18n } from '../../lib/i18n/i18n';
-import { FriendListScreen } from '../../components/screens/FriendListScreen';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -17,7 +16,7 @@ export default function TabLayout() {
   return (
     <Stack
       screenOptions={{
-        title: i18n.t('friendList.title'),
+        title: i18n.t('birthdayList.title'),
         headerRight: () => (
           <Link href="/modal" asChild>
             <Pressable>
@@ -36,7 +35,7 @@ export default function TabLayout() {
     >
       <Stack.Screen name="index" />
       <Stack.Screen
-        name="two"
+        name="register"
         options={{
           title: i18n.t('register.add'),
           headerRight: () => (
