@@ -1,31 +1,18 @@
-import { StyleSheet } from 'react-native';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { BirthdayRegisterScreen } from '../../components/screens/BirthdayRegisterScreen';
+import { type Friend } from '../../lib/interfaces/friend';
 
 export default function Register() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/register.tsx" />
-    </View>
-  );
+  const initFriend: Friend = {
+    id: uuidv4(),
+    name: '',
+    isBirthYearUnknown: false,
+    birthMonth: 1,
+    birthDay: 1,
+    selectedLabels: [],
+    reminderSettings: [],
+  };
+  return <BirthdayRegisterScreen friend={initFriend} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});

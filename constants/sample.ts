@@ -8,11 +8,15 @@ interface HeaderListItem {
 // So yes, I like gangster movies.
 export const data = [
   {
-    header: 'Robert De Niro',
+    header: 'Al Pacino',
   },
   {
     title: 'The Godfather',
   },
+  {
+    header: 'Robert De Niro',
+  },
+
   {
     title: 'The Godfather: Part II',
   },
@@ -28,9 +32,7 @@ export const data = [
   {
     title: 'The Irishman',
   },
-  {
-    header: 'Al Pacino',
-  },
+
   {
     title: 'The Godfather',
   },

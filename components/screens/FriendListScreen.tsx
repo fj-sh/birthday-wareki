@@ -11,6 +11,8 @@ import { BottomFloatingButton } from '../UIParts/FloatingButton';
 import { Palette } from '../../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { i18n } from '../../lib/i18n/i18n';
+import { textInputStyles } from '../UIParts/styles/textInputStyles';
 
 const HeaderHeight = 65;
 const ItemHeight = 50;
@@ -70,15 +72,16 @@ const FriendListScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={localStyles.container}>
       <>
-        <View style={styles.textInputContainer}>
-          <EvilIcons name="search" size={24} color="#BDBDBD" style={styles.icon} />
+        <View style={localStyles.textInputContainer}>
+          <EvilIcons name="search" size={24} color="#BDBDBD" style={localStyles.icon} />
           <TextInput
-            style={styles.textInput}
+            style={textInputStyles.input}
             onEndEditing={(e) => {
               onChangeSearchText(e.nativeEvent.text);
             }}
+            placeholder={i18n.t('birthdayList.searchPlaceholder')}
           />
         </View>
         {/* Animated Header Section */}
@@ -153,7 +156,7 @@ const FriendListScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const localStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -176,12 +179,10 @@ const styles = StyleSheet.create({
     height: 30,
     fontSize: 16,
     width: '95%',
-
     marginVertical: 6,
     paddingHorizontal: 4,
     borderRadius: 5,
     backgroundColor: '#F5F5F5',
-    flex: 1,
   },
 });
 

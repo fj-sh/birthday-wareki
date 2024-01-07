@@ -1,4 +1,5 @@
 import { type Label } from './label';
+import { type Group } from './group';
 
 export enum ReminderSetting {
   OnTheDay = 'OnTheDay',
@@ -23,6 +24,9 @@ export interface Friend {
   birthMonth: number;
   birthDay: number;
   age?: number;
+  warekiBirthday?: string;
+  eto?: string;
   selectedLabels: Label[];
   reminderSettings: ReminderSetting[];
+  group?: Group;
 }

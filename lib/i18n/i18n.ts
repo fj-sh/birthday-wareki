@@ -7,6 +7,7 @@ export const i18n = new I18n({
     birthdayList: {
       addBirthday: 'Add Birthday',
       title: 'Birthday List',
+      searchPlaceholder: 'Search by name or memo',
     },
     register: {
       add: 'Add Birthday',
@@ -18,6 +19,7 @@ export const i18n = new I18n({
     birthdayList: {
       addBirthday: '誕生日を追加',
       title: '誕生日一覧',
+      searchPlaceholder: '名前やメモで検索',
     },
     register: {
       add: '誕生日を追加',
