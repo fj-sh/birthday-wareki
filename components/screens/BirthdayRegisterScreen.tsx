@@ -1,13 +1,16 @@
 import { type Friend } from '../../lib/interfaces/friend';
 import { useRef, useState } from 'react';
-import { View, StyleSheet, Switch, TextInput, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Switch,
+  TextInput,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { Label } from '../UIParts/Label';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { Easing, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
@@ -34,8 +37,36 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     if (dayInputRef.current === null) {
       return;
     }
-    if (text.length === 2) {
-      dayInputRef.current.focus();
+
+    if (text === '') {
+      setFriend((previousState) => ({
+        ...previousState,
+        birthMonth: '',
+      }));
+      return;
+    }
+    // テキストを数値に変換し、12を超えないようにする
+    let month = parseInt(text, 10);
+
+    if (!isNaN(month)) {
+      month = Math.min(month, 12);
+
+      // 1桁の場合、先頭に0を追加する
+      const formattedMonth = month >= 1 && month < 10 ? `0${month}` : `${month}`;
+
+      // 2桁の場合、次の入力フィールドにフォーカスする
+      if (formattedMonth.length === 2 && formattedMonth !== '00' && formattedMonth !== '01') {
+        dayInputRef.current.focus();
+      }
+
+      if (formattedMonth === '11' || formattedMonth === '12') {
+        dayInputRef.current.focus();
+      }
+
+      setFriend((previousState) => ({
+        ...previousState,
+        birthMonth: formattedMonth,
+      }));
     }
   };
 
@@ -60,60 +91,68 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
   }, [friend.isBirthYearUnknown]);
 
   return (
-    <View style={localStyles.container}>
-      <View style={localStyles.inputContainer}>
-        <Label text={'名前'} position={'left'} />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={localStyles.container}>
+        <View style={localStyles.inputContainer}>
+          <Label text={'名前'} position={'left'} />
 
-        <TextInput style={localStyles.textInput} value={friend.name} placeholder={'名前を入力'} />
+          <TextInput style={localStyles.textInput} value={friend.name} placeholder={'名前を入力'} />
 
-        <Label text={'生年月日'} position={'left'} />
+          <Label text={'生年月日'} position={'left'} />
 
-        <View style={localStyles.birthdayInputContainer}>
-          <Animated.View
-            style={[
-              {
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginHorizontal: 4,
-              },
-              rBirthYearInputStyle,
-            ]}
-          >
+          <View style={localStyles.birthdayInputContainer}>
+            <Animated.View
+              style={[
+                {
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginHorizontal: 4,
+                },
+                rBirthYearInputStyle,
+              ]}
+            >
+              <TextInput
+                style={localStyles.birthdayInput}
+                placeholder={'YYYY'}
+                onChangeText={handleYearChange}
+                maxLength={4}
+                value={friend.birthYear}
+                keyboardType={'number-pad'}
+              />
+              <Text style={localStyles.birthdayInputSeparator}>/</Text>
+            </Animated.View>
             <TextInput
+              ref={monthInputRef}
               style={localStyles.birthdayInput}
-              placeholder={'YYYY'}
-              onChangeText={handleYearChange}
-              maxLength={4}
+              placeholder={'MM'}
+              onChangeText={handleMonthChange}
+              value={friend.birthMonth}
+              maxLength={3}
+              keyboardType={'number-pad'}
             />
             <Text style={localStyles.birthdayInputSeparator}>/</Text>
-          </Animated.View>
-          <TextInput
-            ref={monthInputRef}
-            style={localStyles.birthdayInput}
-            placeholder={'MM'}
-            onChangeText={handleMonthChange}
-            maxLength={2}
-          />
-          <Text style={localStyles.birthdayInputSeparator}>/</Text>
-          <TextInput
-            style={localStyles.birthdayInput}
-            ref={dayInputRef}
-            placeholder={'DD'}
-            maxLength={2}
-          />
-        </View>
-        <View style={localStyles.birthdayUnknownContainer}>
-          <Text style={localStyles.labelText}>生まれ年が不明</Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#25D366' }}
-            thumbColor={friend.isBirthYearUnknown ? '#f4f3f4' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleIsBirthYearUnknown}
-            value={friend.isBirthYearUnknown}
-          />
+            <TextInput
+              style={localStyles.birthdayInput}
+              ref={dayInputRef}
+              placeholder={'DD'}
+              maxLength={2}
+              keyboardType={'number-pad'}
+              value={friend.birthDay}
+            />
+          </View>
+          <View style={localStyles.birthdayUnknownContainer}>
+            <Text style={localStyles.labelText}>生まれ年が不明</Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#25D366' }}
+              thumbColor={friend.isBirthYearUnknown ? '#f4f3f4' : '#f4f3f4'}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleIsBirthYearUnknown}
+              value={friend.isBirthYearUnknown}
+            />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

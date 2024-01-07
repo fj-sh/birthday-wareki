@@ -20,13 +20,12 @@ export interface Friend {
   id: string;
   name: string;
   isBirthYearUnknown: boolean;
-  birthYear?: number;
-  birthMonth: number;
-  birthDay: number;
+  birthYear?: string;
+  birthMonth: string;
+  birthDay: string;
   age?: number;
   warekiBirthday?: string;
   eto?: string;
   selectedLabels: Label[];
-  reminderSettings: ReminderSetting[];
   group?: Group;
 }

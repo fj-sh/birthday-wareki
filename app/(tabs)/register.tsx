@@ -9,8 +9,8 @@ export default function Register() {
     id: uuidv4(),
     name: '',
     isBirthYearUnknown: false,
-    birthMonth: 1,
-    birthDay: 1,
+    birthMonth: '',
+    birthDay: '',
     selectedLabels: [],
     reminderSettings: [],
   };
