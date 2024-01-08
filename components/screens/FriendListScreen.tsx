@@ -12,8 +12,6 @@ import { Palette } from '../../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { i18n } from '../../lib/i18n/i18n';
-import { textInputStyles } from '../UIParts/styles/textInputStyles';
-
 const HeaderHeight = 65;
 const ItemHeight = 50;
 
@@ -77,7 +75,7 @@ const FriendListScreen = () => {
         <View style={localStyles.textInputContainer}>
           <EvilIcons name="search" size={24} color="#BDBDBD" style={localStyles.icon} />
           <TextInput
-            style={textInputStyles.input}
+            style={localStyles.textInput}
             onEndEditing={(e) => {
               onChangeSearchText(e.nativeEvent.text);
             }}

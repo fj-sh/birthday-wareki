@@ -8,9 +8,14 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  useColorScheme,
 } from 'react-native';
 import { Label } from '../UIParts/Label';
 import Animated, { Easing, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useBirthday } from '../../hooks/useBirthday';
+import { CheckableChip } from '../UIParts/CheckableChip';
+import { sampleTags } from '../../lib/interfaces/label';
+import { TextButton } from '../UIParts/TextButton';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
@@ -21,54 +26,17 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     ...props.friend,
   });
 
+  const colorScheme = useColorScheme();
+
   const monthInputRef = useRef<TextInput>(null);
   const dayInputRef = useRef<TextInput>(null);
 
-  const handleYearChange = (text: string) => {
-    if (monthInputRef.current === null) {
-      return;
-    }
-    if (text.length === 4) {
-      monthInputRef.current.focus();
-    }
-  };
-
-  const handleMonthChange = (text: string) => {
-    if (dayInputRef.current === null) {
-      return;
-    }
-
-    if (text === '') {
-      setFriend((previousState) => ({
-        ...previousState,
-        birthMonth: '',
-      }));
-      return;
-    }
-    // テキストを数値に変換し、12を超えないようにする
-    let month = parseInt(text, 10);
-
-    if (!isNaN(month)) {
-      month = Math.min(month, 12);
-
-      // 1桁の場合、先頭に0を追加する
-      const formattedMonth = month >= 1 && month < 10 ? `0${month}` : `${month}`;
-
-      // 2桁の場合、次の入力フィールドにフォーカスする
-      if (formattedMonth.length === 2 && formattedMonth !== '00' && formattedMonth !== '01') {
-        dayInputRef.current.focus();
-      }
-
-      if (formattedMonth === '11' || formattedMonth === '12') {
-        dayInputRef.current.focus();
-      }
-
-      setFriend((previousState) => ({
-        ...previousState,
-        birthMonth: formattedMonth,
-      }));
-    }
-  };
+  const { handleYearChange, handleMonthChange, handleDayChange } = useBirthday({
+    friend,
+    setFriend,
+    monthInputRef,
+    dayInputRef,
+  });
 
   const toggleIsBirthYearUnknown = () => {
     setFriend((previousState) => ({
@@ -90,13 +58,38 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     };
   }, [friend.isBirthYearUnknown]);
 
+  const textInputStyle = [
+    localStyles.textInput,
+    colorScheme === 'dark' && localStyles.darkTextInput,
+  ];
+
+  const birthdayInputSeparatorStyle = [
+    localStyles.birthdayInputSeparator,
+    colorScheme === 'dark' && localStyles.darkLabelText,
+  ];
+
+  const labelTextStyle = [
+    localStyles.labelText,
+    colorScheme === 'dark' && localStyles.darkLabelText,
+  ];
+
+  const birthdayInputStyle = [
+    localStyles.birthdayInput,
+    colorScheme === 'dark' && localStyles.darkTextInput,
+  ];
+
+  const memoInputStyle = [
+    localStyles.textMemoInput,
+    colorScheme === 'dark' && localStyles.darkTextInput,
+  ];
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={localStyles.container}>
+      <View style={colorScheme === 'dark' ? localStyles.darkContainer : localStyles.container}>
         <View style={localStyles.inputContainer}>
           <Label text={'名前'} position={'left'} />
 
-          <TextInput style={localStyles.textInput} value={friend.name} placeholder={'名前を入力'} />
+          <TextInput style={textInputStyle} value={friend.name} placeholder={'名前を入力'} />
 
           <Label text={'生年月日'} position={'left'} />
 
@@ -112,36 +105,37 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
               ]}
             >
               <TextInput
-                style={localStyles.birthdayInput}
+                style={birthdayInputStyle}
                 placeholder={'YYYY'}
                 onChangeText={handleYearChange}
                 maxLength={4}
                 value={friend.birthYear}
                 keyboardType={'number-pad'}
               />
-              <Text style={localStyles.birthdayInputSeparator}>/</Text>
+              <Text style={birthdayInputSeparatorStyle}>/</Text>
             </Animated.View>
             <TextInput
               ref={monthInputRef}
-              style={localStyles.birthdayInput}
+              style={birthdayInputStyle}
               placeholder={'MM'}
               onChangeText={handleMonthChange}
               value={friend.birthMonth}
               maxLength={3}
               keyboardType={'number-pad'}
             />
-            <Text style={localStyles.birthdayInputSeparator}>/</Text>
+            <Text style={birthdayInputSeparatorStyle}>/</Text>
             <TextInput
-              style={localStyles.birthdayInput}
+              style={birthdayInputStyle}
               ref={dayInputRef}
               placeholder={'DD'}
               maxLength={2}
+              onChangeText={handleDayChange}
               keyboardType={'number-pad'}
               value={friend.birthDay}
             />
           </View>
           <View style={localStyles.birthdayUnknownContainer}>
-            <Text style={localStyles.labelText}>生まれ年が不明</Text>
+            <Text style={labelTextStyle}>生まれ年が不明</Text>
             <Switch
               trackColor={{ false: '#767577', true: '#25D366' }}
               thumbColor={friend.isBirthYearUnknown ? '#f4f3f4' : '#f4f3f4'}
@@ -150,6 +144,51 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
               value={friend.isBirthYearUnknown}
             />
           </View>
+
+          <Label text={'タグを設定'} position={'left'} />
+          <View style={localStyles.tagChipContainer}>
+            {sampleTags.map((label) => (
+              <CheckableChip
+                key={label.id}
+                label={label.name}
+                checked={friend.labelIds.includes(label.id)}
+                checkedColor={'#DCEDC8'}
+                normalColor={'#FFF8E1'}
+                onPress={() => {
+                  // friend を更新
+                  if (friend.labelIds.includes(label.id)) {
+                    setFriend((previousState) => ({
+                      ...previousState,
+                      labelIds: previousState.labelIds.filter((id) => id !== label.id),
+                    }));
+                  } else {
+                    setFriend((previousState) => ({
+                      ...previousState,
+                      labelIds: [...previousState.labelIds, label.id],
+                    }));
+                  }
+                }}
+              />
+            ))}
+          </View>
+          <View style={localStyles.textButton}>
+            <TextButton text={'タグを追加'} onPress={() => {}} />
+          </View>
+
+          <Label text={'メモ'} position={'left'} />
+          <TextInput
+            style={memoInputStyle}
+            value={friend.memo}
+            placeholder={'メモを入力'}
+            placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'lightgray'}
+            multiline={true}
+            onChangeText={(text) => {
+              setFriend((previousState) => ({
+                ...previousState,
+                memo: text,
+              }));
+            }}
+          />
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -160,6 +199,10 @@ const localStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  darkContainer: {
+    flex: 1,
+    backgroundColor: '#000',
   },
 
   inputContainer: {
@@ -175,6 +218,11 @@ const localStyles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 5,
     backgroundColor: '#F5F5F5',
+  },
+
+  darkTextInput: {
+    backgroundColor: '#333',
+    color: '#fff',
   },
 
   birthdayInputContainer: {
@@ -202,6 +250,30 @@ const localStyles = StyleSheet.create({
   },
   labelText: {
     fontSize: 16,
+  },
+  darkLabelText: {
+    color: '#fff',
+  },
+  tagChipContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+
+  textButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+
+  textMemoInput: {
+    minHeight: 100,
+    height: 'auto',
+    fontSize: 16,
+    width: '100%',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderRadius: 5,
+    backgroundColor: '#F5F5F5',
   },
 });
 

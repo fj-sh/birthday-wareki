@@ -11,8 +11,8 @@ export default function Register() {
     isBirthYearUnknown: false,
     birthMonth: '',
     birthDay: '',
-    selectedLabels: [],
-    reminderSettings: [],
+    labelIds: ['1', '2'],
+    memo: '',
   };
   return <BirthdayRegisterScreen friend={initFriend} />;
 }

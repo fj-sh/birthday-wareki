@@ -1,4 +1,3 @@
-import { type Label } from './label';
 import { type Group } from './group';
 
 export enum ReminderSetting {
@@ -25,7 +24,8 @@ export interface Friend {
   birthDay: string;
   age?: number;
   warekiBirthday?: string;
+  memo: string;
   eto?: string;
-  selectedLabels: Label[];
+  labelIds: string[];
   group?: Group;
 }

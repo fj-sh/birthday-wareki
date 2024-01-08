@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, type ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, type ViewStyle, useColorScheme } from 'react-native';
 
 interface LabelProps {
   text: string;
   position: 'left' | 'right' | 'center';
 }
 const Label = (props: LabelProps) => {
+  const colorScheme = useColorScheme();
   const positionToAlignItems = (position: 'left' | 'right' | 'center') => {
     switch (position) {
       case 'left':
@@ -20,9 +21,11 @@ const Label = (props: LabelProps) => {
     alignItems: positionToAlignItems(props.position),
   };
 
+  const textStyle = [localStyles.text, colorScheme === 'dark' && localStyles.darkText];
+
   return (
     <View style={[localStyles.container, positionStyle]}>
-      <Text style={localStyles.text}>{props.text}</Text>
+      <Text style={textStyle}>{props.text}</Text>
     </View>
   );
 };
@@ -35,6 +38,9 @@ const localStyles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  darkText: {
+    color: '#fff',
   },
 });
 
