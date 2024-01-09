@@ -1,4 +1,4 @@
-import type { LayoutRectangle } from 'react-native';
+import { type LayoutRectangle, useColorScheme } from 'react-native';
 import Animated, { Extrapolation } from 'react-native-reanimated';
 import { type SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 
@@ -16,12 +16,14 @@ interface UseHeaderStyleParams {
     header: string;
     value: number;
   }>;
+  colorSchemeName: string | null | undefined;
 }
 
 const useHeaderStyle = ({
   contentOffsetY,
   headersLayoutX,
   headersLayoutY,
+  colorSchemeName,
 }: UseHeaderStyleParams) => {
   const rIndicatorStyle = useAnimatedStyle(() => {
     const headersData = headersLayoutX.value;
@@ -36,7 +38,7 @@ const useHeaderStyle = ({
     return {
       width,
       height: 3,
-      backgroundColor: 'black',
+      backgroundColor: colorSchemeName === 'dark' ? '#757575' : 'black',
     };
   }, [headersLayoutY]);
 

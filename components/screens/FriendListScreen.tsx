@@ -2,7 +2,15 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { data, type HeaderListItem, isHeader, type ListItem } from '../../constants/sample';
 import { useHeaderStyle } from '../../hooks/useHeaderStyle';
 import { useCallback, useRef, useState } from 'react';
-import { FlatList, SafeAreaView, Text, StyleSheet, TextInput, View } from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  TextInput,
+  View,
+  useColorScheme,
+} from 'react-native';
 import { useHeaderLayout } from '../../hooks/useHeaderLayout';
 import { MeasureableAnimatedView } from '../MeasureableAnimatedView';
 import { SectionListItem } from '../SectionListItem';
@@ -12,17 +20,33 @@ import { Palette } from '../../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { i18n } from '../../lib/i18n/i18n';
-const HeaderHeight = 65;
-const ItemHeight = 50;
+const HeaderHeight = 50;
+const ItemHeight = 100;
 
 const headers = data.filter(isHeader) as HeaderListItem[];
 
 const FriendListScreen = () => {
   const [searchText, setSearchText] = useState('');
+  const colorScheme = useColorScheme();
   const contentOffsetY = useSharedValue(0);
   const { bottom: safeBottom } = useSafeAreaInsets();
   const isScrolling = useSharedValue(false);
   const router = useRouter();
+
+  const textInputContainerStyle = [
+    localStyles.textInputContainer,
+    {
+      borderColor: colorScheme === 'dark' ? '#424242' : '#E0E0E0',
+      backgroundColor: colorScheme === 'dark' ? '#424242' : '#F5F5F5',
+    },
+  ];
+
+  const textInputStyle = [
+    localStyles.textInput,
+    {
+      backgroundColor: colorScheme === 'dark' ? '#424242' : '#F5F5F5',
+    },
+  ];
 
   // Where the magic happens :)
   const { headerRefs, headersLayoutX, headersLayoutY } = useHeaderLayout({
@@ -36,6 +60,7 @@ const FriendListScreen = () => {
     contentOffsetY,
     headersLayoutX,
     headersLayoutY,
+    colorSchemeName: colorScheme,
   });
 
   const flatlistRef = useRef<FlatList<ListItem | HeaderListItem>>(null);
@@ -65,17 +90,16 @@ const FriendListScreen = () => {
   }, []);
 
   const onAddButtonPress = useCallback(() => {
-    console.log('onAddButtonPress');
     router.push('/(tabs)/register');
   }, []);
 
   return (
     <SafeAreaView style={localStyles.container}>
       <>
-        <View style={localStyles.textInputContainer}>
+        <View style={textInputContainerStyle}>
           <EvilIcons name="search" size={24} color="#BDBDBD" style={localStyles.icon} />
           <TextInput
-            style={localStyles.textInput}
+            style={textInputStyle}
             onEndEditing={(e) => {
               onChangeSearchText(e.nativeEvent.text);
             }}
@@ -176,7 +200,7 @@ const localStyles = StyleSheet.create({
   textInput: {
     height: 30,
     fontSize: 16,
-    width: '95%',
+    width: '85%',
     marginVertical: 6,
     paddingHorizontal: 4,
     borderRadius: 5,

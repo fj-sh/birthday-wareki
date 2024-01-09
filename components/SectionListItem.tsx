@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { type HeaderListItem, isHeader, type ListItem } from '../constants/sample';
 
 interface SectionListItemProps {
@@ -7,11 +7,17 @@ interface SectionListItemProps {
 }
 
 const SectionListItem = ({ item, height }: SectionListItemProps) => {
+  const colorScheme = useColorScheme();
+  const headerColorStyle =
+    colorScheme === 'dark' ? { backgroundColor: '#333' } : { backgroundColor: '#F1F8E9' };
+  const headerTextStyle = {
+    color: colorScheme === 'dark' ? '#fff' : '#000',
+  };
   if (isHeader(item)) {
     const { header } = item as HeaderListItem;
     return (
-      <View style={[localStyles.headerContainer, { height }]}>
-        <Text style={localStyles.headerText}>{header}</Text>
+      <View style={[localStyles.headerContainer, { height }, headerColorStyle]}>
+        <Text style={[localStyles.headerText, headerTextStyle]}>{header}</Text>
       </View>
     );
   }
@@ -27,7 +33,6 @@ const SectionListItem = ({ item, height }: SectionListItemProps) => {
 
 const localStyles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: 'rgba(0,0,0,0.1)',
     justifyContent: 'center',
   },
   headerText: {

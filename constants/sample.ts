@@ -1,3 +1,5 @@
+import { monthForLocale } from '../lib/feat/monthForLocale';
+
 interface ListItem {
   title: string;
 }
@@ -8,13 +10,13 @@ interface HeaderListItem {
 // So yes, I like gangster movies.
 export const data = [
   {
-    header: 'Al Pacino',
+    header: monthForLocale(1, 'long'),
   },
   {
     title: 'The Godfather',
   },
   {
-    header: 'Robert De Niro',
+    header: monthForLocale(2, 'long'),
   },
 
   {

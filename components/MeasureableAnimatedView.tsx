@@ -16,9 +16,6 @@ const MeasureableAnimatedView = React.forwardRef<MeasureableAnimatedViewRef, Vie
 
     const rMeasure: MeasureFunction = useCallback(() => {
       'worklet';
-      // We can only use the measure function in the worklet.
-      // This check is totally useless in this example, but I wanted to show you how to use the _WORKLET variable.
-      if (!_WORKLET) return null;
       return measure(animatedRef);
     }, [animatedRef]);
 
