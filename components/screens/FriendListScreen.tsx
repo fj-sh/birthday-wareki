@@ -1,5 +1,5 @@
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { data, type HeaderListItem, isHeader, type ListItem } from '../../constants/sample';
+import { data, type HeaderListItem, isHeader } from '../../constants/sample';
 import { useHeaderStyle } from '../../hooks/useHeaderStyle';
 import { useCallback, useRef, useState } from 'react';
 import {
@@ -21,9 +21,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { i18n } from '../../lib/i18n/i18n';
 import { type Friend } from '../../lib/interfaces/friend';
-
-const HeaderHeight = 50;
-export const ItemHeight = 100;
+import { SwipeableListItem } from '../UIParts/SwipeableListItem';
+import { HeaderHeight, ItemHeight } from '../../constants/itemHeight';
 
 const headers = data.filter(isHeader) as HeaderListItem[];
 
@@ -113,7 +112,7 @@ const FriendListScreen = () => {
           {headers.map(({ header }, index) => {
             return (
               <MeasureableAnimatedView
-                key={header}
+                key={`${header}-${index}`}
                 onTouchStart={() => {
                   onSelectHeaderItem(header);
                 }}
@@ -129,6 +128,7 @@ const FriendListScreen = () => {
                     textTransform: 'uppercase',
                     letterSpacing: 1,
                   }}
+                  key={`${header}-${index}-text`}
                 >
                   {header}
                 </Text>
@@ -156,8 +156,21 @@ const FriendListScreen = () => {
           paddingBottom: 400,
         }}
         renderItem={({ item }) => {
+          if (isHeader(item)) {
+            const header = item as HeaderListItem;
+            return <SectionListItem item={header} height={HeaderHeight} key={header.header} />;
+          }
+
+          const friend = item as Friend;
           return (
-            <SectionListItem item={item} height={isHeader(item) ? HeaderHeight : ItemHeight} />
+            <SwipeableListItem
+              simultaneousHandlers={flatlistRef}
+              friend={friend}
+              onDismiss={() => {
+                console.log('onDismiss');
+              }}
+              key={friend.id}
+            />
           );
         }}
       />

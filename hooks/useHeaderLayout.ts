@@ -1,4 +1,4 @@
-import { type HeaderListItem, isHeader, type ListItem } from '../constants/sample';
+import { type HeaderListItem, isHeader } from '../constants/sample';
 import { useConst } from './useConst';
 import { useMounted } from './useMounted';
 import { createRef, useMemo } from 'react';

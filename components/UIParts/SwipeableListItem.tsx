@@ -12,8 +12,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { ItemHeight } from '../screens/FriendListScreen';
+
 import { FontAwesome5 } from '@expo/vector-icons';
+import { ItemHeight } from '../../constants/itemHeight';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
@@ -23,10 +24,10 @@ interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandle
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.3;
 
-const ListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItemProps) => {
+const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItemProps) => {
   const translateX = useSharedValue(0);
   const itemHeight = useSharedValue(ItemHeight);
-  const marginVertical = useSharedValue(10);
+  const marginVertical = useSharedValue(0);
   const opacity = useSharedValue(1);
 
   const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
@@ -38,7 +39,7 @@ const ListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItemProps) =>
       if (shouldBeDismissed) {
         translateX.value = withTiming(-SCREEN_WIDTH);
         itemHeight.value = withTiming(0);
-        marginVertical.value = withTiming(0);
+        marginVertical.value = withTiming(10);
         opacity.value = withTiming(0, undefined, (isFinished) => {
           if (isFinished && onDismiss) {
             runOnJS(onDismiss)(friend);
@@ -91,14 +92,16 @@ const styles = StyleSheet.create({
   taskContainer: {
     width: '100%',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   friend: {
-    width: '90%',
-    height: ItemHeight,
+    width: '95%',
+    height: ItemHeight - 20,
     justifyContent: 'center',
+
     paddingLeft: 20,
-    backgroundColor: 'white',
     borderRadius: 10,
+    backgroundColor: 'white',
     // Shadow for iOS
     shadowOpacity: 0.08,
     shadowOffset: {
@@ -114,7 +117,6 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     height: ItemHeight,
-    width: ItemHeight,
     position: 'absolute',
     right: '10%',
     justifyContent: 'center',
@@ -122,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ListItem };
+export { SwipeableListItem };
