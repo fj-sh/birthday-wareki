@@ -1,4 +1,5 @@
 import { monthForLocale } from '../lib/feat/monthForLocale';
+import { type Friend } from '../lib/interfaces/friend';
 
 interface ListItem {
   title: string;
@@ -8,106 +9,109 @@ interface HeaderListItem {
 }
 
 // So yes, I like gangster movies.
-export const data = [
+export const data: Array<Friend | HeaderListItem> = [
   {
     header: monthForLocale(1, 'long'),
   },
   {
-    title: 'The Godfather',
+    id: '1',
+    name: 'Alice',
+    isBirthYearUnknown: false,
+    birthYear: '1990',
+    birthMonth: '06',
+    birthDay: '15',
+    age: 34,
+    memo: 'Loves photography',
+    labelIds: ['1', '3'],
+  },
+  {
+    id: '2',
+    name: 'Bob',
+    isBirthYearUnknown: true,
+    birthMonth: '11',
+    birthDay: '22',
+    memo: 'Enjoys hiking',
+    labelIds: ['2', '4'],
   },
   {
     header: monthForLocale(2, 'long'),
   },
-
   {
-    title: 'The Godfather: Part II',
+    id: '3',
+    name: 'Takashi',
+    isBirthYearUnknown: true,
+    birthMonth: '11',
+    birthDay: '22',
+    memo: '将棋が好きです',
+    labelIds: ['2', '4'],
   },
   {
-    title: 'The Godfather: Part III',
+    header: monthForLocale(3, 'long'),
   },
   {
-    title: 'Goodfellas',
-  },
-  {
-    title: 'Casino',
-  },
-  {
-    title: 'The Irishman',
-  },
-
-  {
-    title: 'The Godfather',
-  },
-  {
-    title: 'The Godfather: Part II',
-  },
-  {
-    title: 'The Godfather: Part III',
-  },
-  {
-    title: 'Scarface',
-  },
-  {
-    title: 'Heat',
-  },
-  {
-    header: 'Joe Pesci',
-  },
-  {
-    title: 'Goodfellas',
-  },
-  {
-    title: 'Casino',
-  },
-  {
-    title: 'The Irishman',
-  },
-  {
-    title: 'Home Alone',
-  },
-  {
-    title: 'Home Alone 2: Lost in New York',
-  },
-  {
-    header: 'Leonardo DiCaprio',
-  },
-  {
-    title: 'The Wolf of Wall Street',
-  },
-  {
-    title: 'The Departed',
-  },
-  {
-    title: 'Shutter Island',
-  },
-  {
-    title: 'Inception',
-  },
-  {
-    title: 'Catch Me If You Can',
+    id: '4',
+    name: 'Emma',
+    isBirthYearUnknown: false,
+    birthYear: '1985',
+    birthMonth: '02',
+    birthDay: '10',
+    age: 39,
+    memo: 'Passionate about art',
+    labelIds: ['5', '6'],
   },
   {
     header: 'Brad Pitt',
   },
   {
-    title: 'Fight Club',
+    id: '5',
+    name: 'Carlos',
+    isBirthYearUnknown: true,
+    birthMonth: '07',
+    birthDay: '30',
+    memo: 'Loves cooking',
+    labelIds: ['7', '3'],
   },
   {
-    title: 'Inglourious Basterds',
+    header: monthForLocale(4, 'long'),
   },
   {
-    title: 'Se7en',
+    id: '6',
+    name: 'Yuki',
+    isBirthYearUnknown: false,
+    birthYear: '1992',
+    birthMonth: '12',
+    birthDay: '01',
+    age: 32,
+    memo: 'Fond of skiing',
+    labelIds: ['2', '8'],
   },
   {
-    title: 'Once Upon a Time... in Hollywood',
+    id: '7',
+    name: 'Sofia',
+    isBirthYearUnknown: false,
+    birthYear: '1995',
+    birthMonth: '04',
+    birthDay: '18',
+    age: 29,
+    memo: 'Enthusiastic traveler',
+    labelIds: ['1', '9'],
   },
   {
-    title: 'The Curious Case of Benjamin Button',
+    header: monthForLocale(5, 'long'),
   },
-] as Array<ListItem | HeaderListItem>;
+  {
+    id: '8',
+    name: 'David',
+    isBirthYearUnknown: true,
+    birthMonth: '09',
+    birthDay: '05',
+    memo: 'Tech enthusiast',
+    labelIds: ['4', '10'],
+  },
+];
 
 // Simple utility function to check if an item is a header or not.
-export const isHeader = (item: ListItem | HeaderListItem) =>
+export const isHeader = (item: Friend | HeaderListItem) =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Boolean((item as any)?.header);
 

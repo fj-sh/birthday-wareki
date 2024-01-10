@@ -1,8 +1,9 @@
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { type HeaderListItem, isHeader, type ListItem } from '../constants/sample';
+import { type Friend } from '../lib/interfaces/friend';
 
 interface SectionListItemProps {
-  item: ListItem | HeaderListItem;
+  item: Friend | HeaderListItem;
   height: number;
 }
 
@@ -22,11 +23,11 @@ const SectionListItem = ({ item, height }: SectionListItemProps) => {
     );
   }
 
-  const { title } = item as ListItem;
+  const { name } = item as Friend;
 
   return (
     <View style={[localStyles.itemContainer, { height }]}>
-      <Text>{title}</Text>
+      <Text>{name}</Text>
     </View>
   );
 };

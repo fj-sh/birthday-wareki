@@ -5,12 +5,13 @@ import { createRef, useMemo } from 'react';
 import { type MeasureableAnimatedViewRef } from '../components/MeasureableAnimatedView';
 import { useDerivedValue } from 'react-native-reanimated';
 import { type LayoutRectangle } from 'react-native';
+import { type Friend } from '../lib/interfaces/friend';
 
 interface UseHeaderLayoutParams {
   headers: HeaderListItem[];
   itemHeight: number;
   headerHeight: number;
-  data: Array<ListItem | HeaderListItem>;
+  data: Array<Friend | HeaderListItem>;
 }
 
 const useHeaderLayout = ({ headers, data, itemHeight, headerHeight }: UseHeaderLayoutParams) => {
@@ -79,7 +80,7 @@ const useHeaderLayout = ({ headers, data, itemHeight, headerHeight }: UseHeaderL
 
   const headersLayoutY = useMemo(() => {
     const map = data.reduce(
-      (acc, item: ListItem | HeaderListItem) => {
+      (acc, item: Friend | HeaderListItem) => {
         if (isHeader(item)) {
           const headerItem = item as HeaderListItem;
           return {

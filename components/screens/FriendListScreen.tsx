@@ -20,8 +20,10 @@ import { Palette } from '../../constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { i18n } from '../../lib/i18n/i18n';
+import { type Friend } from '../../lib/interfaces/friend';
+
 const HeaderHeight = 50;
-const ItemHeight = 100;
+export const ItemHeight = 100;
 
 const headers = data.filter(isHeader) as HeaderListItem[];
 
@@ -63,7 +65,7 @@ const FriendListScreen = () => {
     colorSchemeName: colorScheme,
   });
 
-  const flatlistRef = useRef<FlatList<ListItem | HeaderListItem>>(null);
+  const flatlistRef = useRef<FlatList<Friend | HeaderListItem>>(null);
 
   const onSelectHeaderItem = useCallback((headerItem: string) => {
     const headerIndex = data.findIndex((_item) => (_item as HeaderListItem).header === headerItem);
@@ -168,7 +170,7 @@ const FriendListScreen = () => {
             right: 16,
             height: 64,
             aspectRatio: 1,
-            backgroundColor: Palette.primary,
+            backgroundColor: colorScheme === 'dark' ? '#455A64' : Palette.primary,
             borderRadius: 32,
           },
           rFloatingActionStyle,

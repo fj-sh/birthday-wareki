@@ -23,9 +23,8 @@ export interface Friend {
   birthMonth: string;
   birthDay: string;
   age?: number;
-  warekiBirthday?: string;
   memo: string;
   eto?: string;
+  warekiBirthday?: string;
   labelIds: string[];
-  group?: Group;
 }
