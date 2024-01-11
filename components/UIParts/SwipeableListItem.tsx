@@ -4,7 +4,7 @@ import {
   type PanGestureHandlerGestureEvent,
   type PanGestureHandlerProps,
 } from 'react-native-gesture-handler';
-import { Dimensions, StyleSheet, Text } from 'react-native';
+import { Alert, Dimensions, StyleSheet, Text } from 'react-native';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -30,6 +30,37 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItem
   const marginVertical = useSharedValue(0);
   const opacity = useSharedValue(1);
 
+  const canDelete = () => {
+    Alert.alert(
+      'Delete Friend',
+      `Are you sure you want to delete ${friend.name}?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {
+            translateX.value = withTiming(0);
+          },
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            translateX.value = withTiming(-SCREEN_WIDTH);
+            itemHeight.value = withTiming(0);
+            marginVertical.value = withTiming(10);
+            opacity.value = withTiming(0, undefined, (isFinished) => {
+              if (isFinished && onDismiss) {
+                runOnJS(onDismiss)(friend);
+              }
+            });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   const panGesture = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onActive: (event) => {
       translateX.value = event.translationX;
@@ -37,14 +68,7 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItem
     onEnd: () => {
       const shouldBeDismissed = translateX.value < TRANSLATE_X_THRESHOLD;
       if (shouldBeDismissed) {
-        translateX.value = withTiming(-SCREEN_WIDTH);
-        itemHeight.value = withTiming(0);
-        marginVertical.value = withTiming(10);
-        opacity.value = withTiming(0, undefined, (isFinished) => {
-          if (isFinished && onDismiss) {
-            runOnJS(onDismiss)(friend);
-          }
-        });
+        runOnJS(canDelete)();
       } else {
         translateX.value = withTiming(0);
       }
