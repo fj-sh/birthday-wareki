@@ -58,6 +58,27 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     };
   }, [friend.isBirthYearUnknown]);
 
+  const isAgeInputVisible = () => {
+    return friend.birthMonth !== '' && friend.birthDay !== '' && friend.isBirthYearUnknown;
+  };
+
+  const rAgeInputStyle = useAnimatedStyle(() => {
+    return {
+      width: withTiming(friend.isBirthYearUnknown ? '100%' : '100%', {
+        duration: 200,
+        easing: Easing.linear,
+      }),
+      height: withTiming(friend.isBirthYearUnknown ? 50 : 0, {
+        duration: 200,
+        easing: Easing.linear,
+      }),
+      opacity: withTiming(friend.isBirthYearUnknown ? 1 : 0, {
+        duration: 200,
+        easing: Easing.linear,
+      }),
+    };
+  });
+
   const textInputStyle = [
     localStyles.textInput,
     colorScheme === 'dark' && localStyles.darkTextInput,
@@ -144,6 +165,30 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
               value={friend.isBirthYearUnknown}
             />
           </View>
+          <Animated.View style={rAgeInputStyle}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 16,
+              }}
+            >
+              <Text style={labelTextStyle}>年齢から誕生年を逆算する</Text>
+              <TextInput
+                style={[birthdayInputStyle, { width: 100 }]}
+                placeholder={'年齢を入力'}
+                maxLength={3}
+                onChangeText={(text) => {
+                  setFriend((previousState) => ({
+                    ...previousState,
+                    age: text,
+                  }));
+                }}
+                keyboardType={'number-pad'}
+                value={friend.age}
+              />
+            </View>
+          </Animated.View>
 
           <Label text={'タグを設定'} position={'left'} />
           <View style={localStyles.tagChipContainer}>

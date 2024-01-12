@@ -22,7 +22,7 @@ export interface Friend {
   birthYear?: string;
   birthMonth: string;
   birthDay: string;
-  age?: number;
+  age: string;
   memo: string;
   eto?: string;
   warekiBirthday?: string;
