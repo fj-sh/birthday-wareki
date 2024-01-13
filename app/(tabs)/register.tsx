@@ -13,6 +13,7 @@ export default function Register() {
     birthDay: '',
     labelIds: ['1', '2'],
     memo: '',
+    age: '',
   };
   return <BirthdayRegisterScreen friend={initFriend} />;
 }

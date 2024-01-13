@@ -1,6 +1,7 @@
 import { type Friend } from '../lib/interfaces/friend';
 import { type Dispatch, type RefObject, type SetStateAction } from 'react';
 import { type TextInput } from 'react-native';
+import { getAgeByString } from '../lib/feat/age';
 
 interface UseBirthdayProps {
   friend: Friend;
@@ -14,9 +15,15 @@ const useBirthday = ({ friend, setFriend, monthInputRef, dayInputRef }: UseBirth
     if (monthInputRef.current === null) {
       return;
     }
+
+    let age: string | undefined;
+    if (text.length === 4) {
+      age = getAgeByString(text, friend.birthMonth, friend.birthDay);
+    }
     setFriend((previousState) => ({
       ...previousState,
       birthYear: text,
+      age: age ?? previousState.age,
     }));
 
     if (text.length === 4) {
@@ -29,10 +36,16 @@ const useBirthday = ({ friend, setFriend, monthInputRef, dayInputRef }: UseBirth
       return;
     }
 
+    let age: string | undefined;
+    if (friend.birthYear) {
+      age = getAgeByString(friend.birthYear, text, friend.birthDay);
+    }
+
     if (text === '') {
       setFriend((previousState) => ({
         ...previousState,
         birthMonth: '',
+        age: age ?? previousState.age,
       }));
       return;
     }
@@ -59,9 +72,14 @@ const useBirthday = ({ friend, setFriend, monthInputRef, dayInputRef }: UseBirth
   };
 
   const handleDayChange = (text: string): void => {
+    let age: string | undefined;
+    if (friend.birthYear) {
+      age = getAgeByString(friend.birthYear, friend.birthMonth, text);
+    }
     setFriend((previousState) => ({
       ...previousState,
       birthDay: text,
+      age: age ?? previousState.age,
     }));
   };
 

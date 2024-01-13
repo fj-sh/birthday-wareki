@@ -16,6 +16,7 @@ import { useBirthday } from '../../hooks/useBirthday';
 import { CheckableChip } from '../UIParts/CheckableChip';
 import { sampleTags } from '../../lib/interfaces/label';
 import { TextButton } from '../UIParts/TextButton';
+import { getBirthYearByAge } from '../../lib/feat/age';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
@@ -45,6 +46,23 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     }));
   };
 
+  const handleAgeUnFocused = (text: string) => {
+    if (text === '' || text === undefined) {
+      return;
+    }
+    const updateBirthMonth = friend.birthMonth === '' ? '1' : friend.birthMonth;
+    const updateBirthDay = friend.birthDay === '' ? '1' : friend.birthDay;
+
+    const birthYear = getBirthYearByAge(Number(text), updateBirthMonth, updateBirthDay);
+    setFriend((previousState) => ({
+      ...previousState,
+      isBirthYearUnknown: false,
+      birthYear: birthYear.toString(),
+      birthMonth: updateBirthMonth,
+      birthDay: updateBirthDay,
+    }));
+  };
+
   const rBirthYearInputStyle = useAnimatedStyle(() => {
     return {
       width: withTiming(friend.isBirthYearUnknown ? 0 : 70, {
@@ -57,27 +75,6 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
       }),
     };
   }, [friend.isBirthYearUnknown]);
-
-  const isAgeInputVisible = () => {
-    return friend.birthMonth !== '' && friend.birthDay !== '' && friend.isBirthYearUnknown;
-  };
-
-  const rAgeInputStyle = useAnimatedStyle(() => {
-    return {
-      width: withTiming(friend.isBirthYearUnknown ? '100%' : '100%', {
-        duration: 200,
-        easing: Easing.linear,
-      }),
-      height: withTiming(friend.isBirthYearUnknown ? 50 : 0, {
-        duration: 200,
-        easing: Easing.linear,
-      }),
-      opacity: withTiming(friend.isBirthYearUnknown ? 1 : 0, {
-        duration: 200,
-        easing: Easing.linear,
-      }),
-    };
-  });
 
   const textInputStyle = [
     localStyles.textInput,
@@ -165,7 +162,7 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
               value={friend.isBirthYearUnknown}
             />
           </View>
-          <Animated.View style={rAgeInputStyle}>
+          <View style={localStyles.AgeInputStyle}>
             <View
               style={{
                 flexDirection: 'row',
@@ -173,22 +170,25 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
                 gap: 16,
               }}
             >
-              <Text style={labelTextStyle}>年齢から誕生年を逆算する</Text>
+              <Text style={labelTextStyle}>年齢</Text>
               <TextInput
                 style={[birthdayInputStyle, { width: 100 }]}
                 placeholder={'年齢を入力'}
                 maxLength={3}
-                onChangeText={(text) => {
+                onChangeText={(text: string) => {
                   setFriend((previousState) => ({
                     ...previousState,
                     age: text,
                   }));
                 }}
+                onBlur={() => {
+                  handleAgeUnFocused(friend.age);
+                }}
                 keyboardType={'number-pad'}
                 value={friend.age}
               />
             </View>
-          </Animated.View>
+          </View>
 
           <Label text={'タグを設定'} position={'left'} />
           <View style={localStyles.tagChipContainer}>
@@ -303,6 +303,12 @@ const localStyles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 12,
+  },
+
+  AgeInputStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
   },
 
   textButton: {
