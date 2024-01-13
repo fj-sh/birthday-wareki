@@ -15,13 +15,13 @@ const Wareki = (props: WarekiProps) => {
     colorScheme === 'dark' && localStyles.darkLabelText,
   ];
 
-  if (props.year === '') {
+  if (props.year === '' || props.year.length < 4) {
     return <></>;
   }
 
   const wareki = getWarekiByString(props.year, props.month, props.day);
 
-  return <>{getRegionCode() === 'JP' && <Text style={labelTextStyle}>{wareki}</Text>}</>;
+  return <Text style={labelTextStyle}>{wareki}</Text>;
 };
 
 const localStyles = StyleSheet.create({

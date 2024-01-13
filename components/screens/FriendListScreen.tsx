@@ -128,7 +128,7 @@ const FriendListScreen = () => {
                     textTransform: 'uppercase',
                     letterSpacing: 1,
                   }}
-                  key={`${header}-${index}-text`}
+                  key={`${header}-${index}-header-text`}
                 >
                   {header}
                 </Text>
@@ -158,7 +158,13 @@ const FriendListScreen = () => {
         renderItem={({ item }) => {
           if (isHeader(item)) {
             const header = item as HeaderListItem;
-            return <SectionListItem item={header} height={HeaderHeight} key={header.header} />;
+            return (
+              <SectionListItem
+                item={header}
+                height={HeaderHeight}
+                key={`${header.id}-rendered-header`}
+              />
+            );
           }
 
           const friend = item as Friend;

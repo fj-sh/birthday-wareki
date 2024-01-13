@@ -50,24 +50,19 @@ const useBirthday = ({ friend, setFriend, monthInputRef, dayInputRef }: UseBirth
       return;
     }
 
-    let month = parseInt(text, 10);
-
-    if (!isNaN(month)) {
-      month = Math.min(month, 12);
-      const formattedMonth = month >= 1 && month < 10 ? `0${month}` : `${month}`;
-
-      if (formattedMonth.length === 2 && formattedMonth !== '00' && formattedMonth !== '01') {
-        dayInputRef.current.focus();
+    setFriend((previousState) => ({
+      ...previousState,
+      birthMonth: text,
+    }));
+    if (text.length === 2) {
+      if (text === '00') {
+        setFriend((previousState) => ({
+          ...previousState,
+          birthMonth: '1',
+          age: age ?? previousState.age,
+        }));
       }
-
-      if (formattedMonth === '11' || formattedMonth === '12') {
-        dayInputRef.current.focus();
-      }
-
-      setFriend((previousState) => ({
-        ...previousState,
-        birthMonth: formattedMonth,
-      }));
+      dayInputRef.current.focus();
     }
   };
 
@@ -75,6 +70,14 @@ const useBirthday = ({ friend, setFriend, monthInputRef, dayInputRef }: UseBirth
     let age: string | undefined;
     if (friend.birthYear) {
       age = getAgeByString(friend.birthYear, friend.birthMonth, text);
+    }
+    if (text === '00') {
+      setFriend((previousState) => ({
+        ...previousState,
+        birthDay: '1',
+        age: age ?? previousState.age,
+      }));
+      return;
     }
     setFriend((previousState) => ({
       ...previousState,

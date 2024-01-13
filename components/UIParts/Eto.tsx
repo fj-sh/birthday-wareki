@@ -19,7 +19,7 @@ const Eto = (props: EtoProps) => {
 
   const eto = getEtoByString(props.year);
 
-  return <>{getRegionCode() === 'JP' && <Text style={labelTextStyle}>{eto}</Text>}</>;
+  return <Text style={labelTextStyle}>{eto}</Text>;
 };
 
 const localStyles = StyleSheet.create({

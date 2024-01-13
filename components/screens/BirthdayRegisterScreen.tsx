@@ -49,7 +49,7 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     }));
   };
 
-  const handleAgeUnFocused = (text: string) => {
+  const setBirthYearByAge = (text: string) => {
     if (text === '' || text === undefined) {
       return;
     }
@@ -183,28 +183,28 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
                     ...previousState,
                     age: text,
                   }));
-                }}
-                onBlur={() => {
-                  handleAgeUnFocused(friend.age);
+                  setBirthYearByAge(text);
                 }}
                 keyboardType={'number-pad'}
                 value={friend.age}
               />
+              {getRegionCode() === 'JP' && friend.birthYear !== '' && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    gap: 16,
+                    marginTop: 16,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
+                  <Eto year={friend.birthYear} />
+                </View>
+              )}
             </View>
           </View>
 
-          {getRegionCode() === 'JP' && friend.birthYear !== '' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                gap: 16,
-                marginTop: 16,
-              }}
-            >
-              <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
-              <Eto year={friend.birthYear} />
-            </View>
-          )}
           <Label text={'タグを設定'} position={'left'} />
           <View style={localStyles.tagChipContainer}>
             {sampleTags.map((label) => (
