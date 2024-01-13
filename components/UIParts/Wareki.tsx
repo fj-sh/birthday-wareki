@@ -1,5 +1,4 @@
 import { StyleSheet, useColorScheme, Text } from 'react-native';
-import { getRegionCode } from '../../lib/feat/localization';
 import { getWarekiByString } from '../../lib/feat/wareki';
 
 interface WarekiProps {

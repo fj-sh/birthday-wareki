@@ -21,6 +21,7 @@ import { TextButton } from '../UIParts/TextButton';
 import { getBirthYearByAge } from '../../lib/feat/age';
 import { getRegionCode } from '../../lib/feat/localization';
 import { Eto } from '../UIParts/Eto';
+import { TagRegisterModal } from '../UIParts/TagRegisterModal';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
@@ -32,6 +33,7 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
   const [friend, setFriend] = useState<Friend>({
     ...props.friend,
   });
+  const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme();
 
@@ -259,7 +261,12 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
                 ))}
               </View>
               <View style={localStyles.textButton}>
-                <TextButton text={'タグを追加'} onPress={() => {}} />
+                <TextButton
+                  text={'タグを追加'}
+                  onPress={() => {
+                    setModalVisible(true);
+                  }}
+                />
               </View>
 
               <Label text={'メモ'} position={'left'} />
@@ -279,6 +286,8 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
                 onBlur={onMemoAreaFocusedOut}
               />
             </View>
+
+            <TagRegisterModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
           </View>
         </TouchableWithoutFeedback>
       </ScrollView>
