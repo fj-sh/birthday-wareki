@@ -23,10 +23,14 @@ import { i18n } from '../../lib/i18n/i18n';
 import { type Friend } from '../../lib/interfaces/friend';
 import { SwipeableListItem } from '../UIParts/SwipeableListItem';
 import { HeaderHeight, ItemHeight } from '../../constants/itemHeight';
+import { useFriendStore } from '../../lib/store/friendStore';
 
 const headers = data.filter(isHeader) as HeaderListItem[];
 
 const FriendListScreen = () => {
+  const { friends } = useFriendStore();
+
+  console.log('friends', friends);
   const [searchText, setSearchText] = useState('');
   const colorScheme = useColorScheme();
   const contentOffsetY = useSharedValue(0);
