@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   useColorScheme,
+  ScrollView,
 } from 'react-native';
 import { Label } from '../UIParts/Label';
 import { Wareki } from '../UIParts/Wareki';
@@ -26,6 +27,8 @@ interface FriendRegisterScreenProps {
 }
 
 const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
+  const scrollViewRef = useRef<ScrollView>(null);
+
   const [friend, setFriend] = useState<Friend>({
     ...props.friend,
   });
@@ -104,158 +107,185 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     colorScheme === 'dark' && localStyles.darkTextInput,
   ];
 
+  const onMemoAreaFocused = () => {
+    scrollViewRef.current?.scrollTo({ y: 250, animated: true });
+  };
+
+  const onMemoAreaFocusedOut = () => {
+    scrollViewRef.current?.scrollTo({ y: 0, animated: true });
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={colorScheme === 'dark' ? localStyles.darkContainer : localStyles.container}>
-        <View style={localStyles.inputContainer}>
-          <Label text={'名前'} position={'left'} />
+    <View style={colorScheme === 'dark' ? localStyles.darkContainer : localStyles.container}>
+      <ScrollView ref={scrollViewRef} contentContainerStyle={{ paddingBottom: 350 }}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={colorScheme === 'dark' ? localStyles.darkContainer : localStyles.container}>
+            <View style={localStyles.inputContainer}>
+              <Label text={'名前'} position={'left'} />
 
-          <TextInput style={textInputStyle} value={friend.name} placeholder={'名前を入力'} />
+              <TextInput style={textInputStyle} value={friend.name} placeholder={'名前を入力'} />
 
-          <Label text={'生年月日'} position={'left'} />
+              <Label text={'生年月日'} position={'left'} />
 
-          <View style={localStyles.birthdayInputContainer}>
-            <Animated.View
-              style={[
-                {
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginHorizontal: 4,
-                },
-                rBirthYearInputStyle,
-              ]}
-            >
-              <TextInput
-                style={birthdayInputStyle}
-                placeholder={'YYYY'}
-                onChangeText={handleYearChange}
-                maxLength={4}
-                value={friend.birthYear}
-                keyboardType={'number-pad'}
-              />
-              <Text style={birthdayInputSeparatorStyle}>/</Text>
-            </Animated.View>
-            <TextInput
-              ref={monthInputRef}
-              style={birthdayInputStyle}
-              placeholder={'MM'}
-              onChangeText={handleMonthChange}
-              value={friend.birthMonth}
-              maxLength={3}
-              keyboardType={'number-pad'}
-            />
-            <Text style={birthdayInputSeparatorStyle}>/</Text>
-            <TextInput
-              style={birthdayInputStyle}
-              ref={dayInputRef}
-              placeholder={'DD'}
-              maxLength={2}
-              onChangeText={handleDayChange}
-              keyboardType={'number-pad'}
-              value={friend.birthDay}
-            />
-          </View>
-          <View style={localStyles.birthdayUnknownContainer}>
-            <Text style={labelTextStyle}>生まれ年が不明</Text>
-            <Switch
-              trackColor={{ false: '#767577', true: '#25D366' }}
-              thumbColor={friend.isBirthYearUnknown ? '#f4f3f4' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleIsBirthYearUnknown}
-              value={friend.isBirthYearUnknown}
-            />
-          </View>
-          <View style={localStyles.AgeInputStyle}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 16,
-              }}
-            >
-              <Text style={labelTextStyle}>年齢 </Text>
-              <TextInput
-                style={[birthdayInputStyle, { width: 100 }]}
-                placeholder={'年齢を入力'}
-                maxLength={3}
-                onChangeText={(text: string) => {
-                  setFriend((previousState) => ({
-                    ...previousState,
-                    age: text,
-                  }));
-                  setBirthYearByAge(text);
-                }}
-                keyboardType={'number-pad'}
-                value={friend.age}
-              />
-              {getRegionCode() === 'JP' && friend.birthYear !== '' && (
+              <View style={localStyles.birthdayInputContainer}>
+                <Animated.View
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginHorizontal: 4,
+                    },
+                    rBirthYearInputStyle,
+                  ]}
+                >
+                  <TextInput
+                    style={birthdayInputStyle}
+                    placeholder={'YYYY'}
+                    onChangeText={handleYearChange}
+                    maxLength={4}
+                    value={friend.birthYear}
+                    keyboardType={'number-pad'}
+                  />
+                  <Text style={birthdayInputSeparatorStyle}>/</Text>
+                </Animated.View>
+                <TextInput
+                  ref={monthInputRef}
+                  style={birthdayInputStyle}
+                  placeholder={'MM'}
+                  onChangeText={handleMonthChange}
+                  value={friend.birthMonth}
+                  maxLength={3}
+                  keyboardType={'number-pad'}
+                />
+                <Text style={birthdayInputSeparatorStyle}>/</Text>
+                <TextInput
+                  style={birthdayInputStyle}
+                  ref={dayInputRef}
+                  placeholder={'DD'}
+                  maxLength={2}
+                  onChangeText={handleDayChange}
+                  keyboardType={'number-pad'}
+                  value={friend.birthDay}
+                />
+              </View>
+              <View style={localStyles.birthdayUnknownContainer}>
+                <Text style={labelTextStyle}>生まれ年が不明</Text>
+                <Switch
+                  trackColor={{ false: '#767577', true: '#25D366' }}
+                  thumbColor={friend.isBirthYearUnknown ? '#f4f3f4' : '#f4f3f4'}
+                  ios_backgroundColor="#3e3e3e"
+                  onValueChange={toggleIsBirthYearUnknown}
+                  value={friend.isBirthYearUnknown}
+                />
+              </View>
+              <View style={localStyles.AgeInputStyle}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    gap: 16,
-                    marginTop: 16,
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    gap: 16,
                   }}
                 >
-                  <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
-                  <Eto year={friend.birthYear} />
+                  <Text style={labelTextStyle}>年齢 </Text>
+                  <TextInput
+                    style={[birthdayInputStyle, { width: 100 }]}
+                    placeholder={'年齢を入力'}
+                    maxLength={3}
+                    onChangeText={(text: string) => {
+                      setFriend((previousState) => ({
+                        ...previousState,
+                        age: text,
+                      }));
+                      setBirthYearByAge(text);
+                    }}
+                    keyboardType={'number-pad'}
+                    value={friend.age}
+                  />
+                  {getRegionCode() === 'JP' && friend.birthYear !== '' && (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        gap: 16,
+                        marginTop: 16,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Wareki
+                        year={friend.birthYear}
+                        month={friend.birthMonth}
+                        day={friend.birthDay}
+                      />
+                      <Eto year={friend.birthYear} />
+                    </View>
+                  )}
                 </View>
-              )}
+              </View>
+
+              <Label text={'タグを設定'} position={'left'} />
+              <View style={localStyles.tagChipContainer}>
+                {sampleTags.map((label) => (
+                  <CheckableChip
+                    key={label.id}
+                    label={label.name}
+                    checked={friend.labelIds.includes(label.id)}
+                    checkedColor={'#DCEDC8'}
+                    normalColor={'#FFF8E1'}
+                    onPress={() => {
+                      // friend を更新
+                      if (friend.labelIds.includes(label.id)) {
+                        setFriend((previousState) => ({
+                          ...previousState,
+                          labelIds: previousState.labelIds.filter((id) => id !== label.id),
+                        }));
+                      } else {
+                        setFriend((previousState) => ({
+                          ...previousState,
+                          labelIds: [...previousState.labelIds, label.id],
+                        }));
+                      }
+                    }}
+                  />
+                ))}
+              </View>
+              <View style={localStyles.textButton}>
+                <TextButton text={'タグを追加'} onPress={() => {}} />
+              </View>
+
+              <Label text={'メモ'} position={'left'} />
+              <TextInput
+                style={memoInputStyle}
+                value={friend.memo}
+                placeholder={'メモを入力'}
+                placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'lightgray'}
+                multiline={true}
+                onChangeText={(text) => {
+                  setFriend((previousState) => ({
+                    ...previousState,
+                    memo: text,
+                  }));
+                }}
+                onFocus={onMemoAreaFocused}
+                onBlur={onMemoAreaFocusedOut}
+              />
             </View>
           </View>
-
-          <Label text={'タグを設定'} position={'left'} />
-          <View style={localStyles.tagChipContainer}>
-            {sampleTags.map((label) => (
-              <CheckableChip
-                key={label.id}
-                label={label.name}
-                checked={friend.labelIds.includes(label.id)}
-                checkedColor={'#DCEDC8'}
-                normalColor={'#FFF8E1'}
-                onPress={() => {
-                  // friend を更新
-                  if (friend.labelIds.includes(label.id)) {
-                    setFriend((previousState) => ({
-                      ...previousState,
-                      labelIds: previousState.labelIds.filter((id) => id !== label.id),
-                    }));
-                  } else {
-                    setFriend((previousState) => ({
-                      ...previousState,
-                      labelIds: [...previousState.labelIds, label.id],
-                    }));
-                  }
-                }}
-              />
-            ))}
-          </View>
-          <View style={localStyles.textButton}>
-            <TextButton text={'タグを追加'} onPress={() => {}} />
-          </View>
-
-          <Label text={'メモ'} position={'left'} />
-          <TextInput
-            style={memoInputStyle}
-            value={friend.memo}
-            placeholder={'メモを入力'}
-            placeholderTextColor={colorScheme === 'dark' ? 'gray' : 'lightgray'}
-            multiline={true}
-            onChangeText={(text) => {
-              setFriend((previousState) => ({
-                ...previousState,
-                memo: text,
-              }));
-            }}
-          />
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </View>
   );
 };
 
 const localStyles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+
+  darkScrollContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
