@@ -9,6 +9,7 @@ export default function Register() {
     id: uuidv4(),
     name: '',
     isBirthYearUnknown: false,
+    birthYear: '',
     birthMonth: '',
     birthDay: '',
     labelIds: ['1', '2'],

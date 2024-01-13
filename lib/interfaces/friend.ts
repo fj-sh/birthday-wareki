@@ -19,7 +19,7 @@ export interface Friend {
   id: string;
   name: string;
   isBirthYearUnknown: boolean;
-  birthYear?: string;
+  birthYear: string;
   birthMonth: string;
   birthDay: string;
   age: string;

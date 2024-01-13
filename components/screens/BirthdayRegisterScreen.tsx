@@ -11,12 +11,15 @@ import {
   useColorScheme,
 } from 'react-native';
 import { Label } from '../UIParts/Label';
+import { Wareki } from '../UIParts/Wareki';
 import Animated, { Easing, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useBirthday } from '../../hooks/useBirthday';
 import { CheckableChip } from '../UIParts/CheckableChip';
 import { sampleTags } from '../../lib/interfaces/label';
 import { TextButton } from '../UIParts/TextButton';
 import { getBirthYearByAge } from '../../lib/feat/age';
+import { getRegionCode } from '../../lib/feat/localization';
+import { Eto } from '../UIParts/Eto';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
@@ -170,7 +173,7 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
                 gap: 16,
               }}
             >
-              <Text style={labelTextStyle}>年齢</Text>
+              <Text style={labelTextStyle}>年齢 </Text>
               <TextInput
                 style={[birthdayInputStyle, { width: 100 }]}
                 placeholder={'年齢を入力'}
@@ -190,6 +193,18 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
             </View>
           </View>
 
+          {getRegionCode() === 'JP' && friend.birthYear !== '' && (
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 16,
+                marginTop: 16,
+              }}
+            >
+              <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
+              <Eto year={friend.birthYear} />
+            </View>
+          )}
           <Label text={'タグを設定'} position={'left'} />
           <View style={localStyles.tagChipContainer}>
             {sampleTags.map((label) => (

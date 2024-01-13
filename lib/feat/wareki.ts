@@ -1,6 +1,6 @@
-type Wareki = '明治' | '大正' | '昭和' | '平成' | '令和';
+type Wareki = '明治以前' | '明治' | '大正' | '昭和' | '平成' | '令和';
 
-const getWarekiByString = (year: string, month: string, day: string): string => {
+export const getWarekiByString = (year: string, month: string, day: string): string => {
   // 空文字が渡された場合は、デフォルト値として1月1日を設定
   const parsedYear = parseInt(year, 10);
   const parsedMonth = month === '' ? 0 : parseInt(month, 10) - 1; // 月は0から始まる
@@ -55,7 +55,8 @@ const getWareki = (birthDate: Date): string => {
     wareki = '明治';
     warekiYear = birthYear - 1867;
   } else {
-    throw new Error('Unsupported year.');
+    wareki = '明治以前';
+    warekiYear = 0;
   }
 
   return `${wareki}${warekiYear}年`;
