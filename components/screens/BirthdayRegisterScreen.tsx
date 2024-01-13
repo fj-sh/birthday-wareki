@@ -123,7 +123,17 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
             <View style={localStyles.inputContainer}>
               <Label text={'名前'} position={'left'} />
 
-              <TextInput style={textInputStyle} value={friend.name} placeholder={'名前を入力'} />
+              <TextInput
+                style={textInputStyle}
+                value={friend.name}
+                placeholder={'名前を入力'}
+                onChangeText={(text: string) => {
+                  setFriend((previousState) => ({
+                    ...previousState,
+                    name: text,
+                  }));
+                }}
+              />
 
               <Label text={'生年月日'} position={'left'} />
 
