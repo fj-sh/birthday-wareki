@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    marginBottom: 140,
     alignItems: 'center',
     marginTop: 22,
   },
@@ -99,6 +98,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    transform: [{ translateY: -70 }],
   },
 
   button: {
