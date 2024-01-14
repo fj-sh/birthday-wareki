@@ -1,7 +1,6 @@
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-import { data, type HeaderListItem, isHeader } from '../../constants/sample';
 import { useHeaderStyle } from '../../hooks/useHeaderStyle';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   SafeAreaView,
@@ -24,14 +23,24 @@ import { type Friend } from '../../lib/interfaces/friend';
 import { SwipeableListItem } from '../UIParts/SwipeableListItem';
 import { HeaderHeight, ItemHeight } from '../../constants/itemHeight';
 import { useFriendStore } from '../../lib/store/friendStore';
-
-const headers = data.filter(isHeader) as HeaderListItem[];
+import { useThemedStyle } from '../../hooks/useThemedStyle';
+import { sortFriendAndHeaderList } from '../../lib/feat/sort';
+import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListItem';
 
 const FriendListScreen = () => {
   const { friends } = useFriendStore();
+  const [friendsAndHeaders, setFriendsAndHeaders] = useState<Array<Friend | HeaderListItem>>([]);
+
+  useEffect(() => {
+    const friendsAndHeaders = sortFriendAndHeaderList(friends);
+    setFriendsAndHeaders(friendsAndHeaders);
+  }, [friends]);
+
+  const headers = friendsAndHeaders.filter(isHeader) as HeaderListItem[];
 
   const [searchText, setSearchText] = useState('');
   const colorScheme = useColorScheme();
+  const { textInputStyle } = useThemedStyle();
   const contentOffsetY = useSharedValue(0);
   const { bottom: safeBottom } = useSafeAreaInsets();
   const isScrolling = useSharedValue(false);
@@ -45,17 +54,10 @@ const FriendListScreen = () => {
     },
   ];
 
-  const textInputStyle = [
-    localStyles.textInput,
-    {
-      backgroundColor: colorScheme === 'dark' ? '#424242' : '#F5F5F5',
-    },
-  ];
-
   // Where the magic happens :)
   const { headerRefs, headersLayoutX, headersLayoutY } = useHeaderLayout({
     headers,
-    data,
+    data: friendsAndHeaders,
     headerHeight: HeaderHeight,
     itemHeight: ItemHeight,
   });
@@ -69,12 +71,21 @@ const FriendListScreen = () => {
 
   const flatlistRef = useRef<FlatList<Friend | HeaderListItem>>(null);
 
-  const onSelectHeaderItem = useCallback((headerItem: string) => {
-    const headerIndex = data.findIndex((_item) => (_item as HeaderListItem).header === headerItem);
-    flatlistRef.current?.scrollToIndex({
-      index: headerIndex,
-    });
-  }, []);
+  const onSelectHeaderItem = useCallback(
+    (headerItem: string) => {
+      console.log('onSelectHeaderItem:', headerItem);
+      const headerIndex = friendsAndHeaders.findIndex(
+        (_item) => (_item as HeaderListItem).header === headerItem
+      );
+
+      console.log('friendsAndHeaders:', friendsAndHeaders);
+      console.log('headerIndex:', headerIndex);
+      flatlistRef.current?.scrollToIndex({
+        index: headerIndex,
+      });
+    },
+    [friendsAndHeaders]
+  );
 
   const onChangeSearchText = useCallback((value: string) => {
     setSearchText(value);
@@ -154,7 +165,7 @@ const FriendListScreen = () => {
         }}
         ref={flatlistRef}
         scrollEventThrottle={16}
-        data={data}
+        data={friendsAndHeaders}
         contentContainerStyle={{
           paddingBottom: 400,
         }}

@@ -1,6 +1,6 @@
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
-import { type HeaderListItem, isHeader, type ListItem } from '../constants/sample';
 import { type Friend } from '../lib/interfaces/friend';
+import { type HeaderListItem, isHeader } from '../lib/interfaces/headerListItem';
 
 interface SectionListItemProps {
   item: Friend | HeaderListItem;

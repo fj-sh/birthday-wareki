@@ -6,12 +6,14 @@ import {
   View,
   Text,
   TouchableOpacity,
-  useColorScheme,
   TextInput,
 } from 'react-native';
 import { useThemedStyle } from '../../hooks/useThemedStyle';
 import { Label } from './Label';
 import { useState } from 'react';
+import { useTagStore } from '../../lib/store/tagStore';
+import { type Tag } from '../../lib/interfaces/tag';
+import { v4 as uuidv4 } from 'uuid';
 
 interface TagRegisterModalProps {
   modalVisible: boolean;
@@ -19,8 +21,19 @@ interface TagRegisterModalProps {
 }
 
 const TagRegisterModal = (props: TagRegisterModalProps) => {
+  const { tags, setTags } = useTagStore();
   const [tagName, setTagName] = useState('');
   const { textInputStyle, buttonBackgroundColorStyle, viewBackgroundColorStyle } = useThemedStyle();
+
+  const onPressAddTag = () => {
+    const newTag: Tag = {
+      id: uuidv4(),
+      name: tagName,
+    };
+    setTags([...tags, newTag]);
+    setTagName('');
+    props.setModalVisible(!props.modalVisible);
+  };
 
   return (
     <Modal
@@ -54,12 +67,7 @@ const TagRegisterModal = (props: TagRegisterModalProps) => {
                 setTagName(text);
               }}
             />
-            <Pressable
-              style={[styles.button, buttonBackgroundColorStyle]}
-              onPress={() => {
-                props.setModalVisible(!props.modalVisible);
-              }}
-            >
+            <Pressable style={[styles.button, buttonBackgroundColorStyle]} onPress={onPressAddTag}>
               <Text style={styles.textStyle}>タグを追加</Text>
             </Pressable>
           </View>

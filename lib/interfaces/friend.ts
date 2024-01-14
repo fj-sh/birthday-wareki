@@ -26,5 +26,5 @@ export interface Friend {
   memo: string;
   eto?: string;
   warekiBirthday?: string;
-  labelIds: string[];
+  tagIds: string[];
 }

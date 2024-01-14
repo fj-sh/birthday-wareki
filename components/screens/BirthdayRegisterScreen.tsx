@@ -1,5 +1,5 @@
 import { type Friend } from '../../lib/interfaces/friend';
-import { useRef, useState } from 'react';
+import { type Dispatch, type SetStateAction, useRef, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -16,27 +16,28 @@ import { Wareki } from '../UIParts/Wareki';
 import Animated, { Easing, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useBirthday } from '../../hooks/useBirthday';
 import { CheckableChip } from '../UIParts/CheckableChip';
-import { sampleTags } from '../../lib/interfaces/label';
+
 import { TextButton } from '../UIParts/TextButton';
 import { getBirthYearByAge } from '../../lib/feat/age';
 import { getRegionCode } from '../../lib/feat/localization';
 import { Eto } from '../UIParts/Eto';
 import { TagRegisterModal } from '../UIParts/TagRegisterModal';
+import { useTagStore } from '../../lib/store/tagStore';
+import { useThemedStyle } from '../../hooks/useThemedStyle';
 
 interface FriendRegisterScreenProps {
   friend: Friend;
+  setFriend: Dispatch<SetStateAction<Friend>>;
 }
 
-const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
+const BirthdayRegisterScreen = ({ friend, setFriend }: FriendRegisterScreenProps) => {
   const scrollViewRef = useRef<ScrollView>(null);
+  const { tags } = useTagStore();
 
-  const [friend, setFriend] = useState<Friend>({
-    ...props.friend,
-  });
   const [modalVisible, setModalVisible] = useState(false);
 
   const colorScheme = useColorScheme();
-
+  const { textInputStyle } = useThemedStyle();
   const monthInputRef = useRef<TextInput>(null);
   const dayInputRef = useRef<TextInput>(null);
 
@@ -84,28 +85,14 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
     };
   }, [friend.isBirthYearUnknown]);
 
-  const textInputStyle = [
-    localStyles.textInput,
-    colorScheme === 'dark' && localStyles.darkTextInput,
-  ];
-
+  const { labelTextStyle, memoInputStyle } = useThemedStyle();
   const birthdayInputSeparatorStyle = [
     localStyles.birthdayInputSeparator,
     colorScheme === 'dark' && localStyles.darkLabelText,
   ];
 
-  const labelTextStyle = [
-    localStyles.labelText,
-    colorScheme === 'dark' && localStyles.darkLabelText,
-  ];
-
   const birthdayInputStyle = [
     localStyles.birthdayInput,
-    colorScheme === 'dark' && localStyles.darkTextInput,
-  ];
-
-  const memoInputStyle = [
-    localStyles.textMemoInput,
     colorScheme === 'dark' && localStyles.darkTextInput,
   ];
 
@@ -236,24 +223,24 @@ const BirthdayRegisterScreen = (props: FriendRegisterScreenProps) => {
 
               <Label text={'タグを設定'} position={'left'} />
               <View style={localStyles.tagChipContainer}>
-                {sampleTags.map((label) => (
+                {tags.map((tag) => (
                   <CheckableChip
-                    key={label.id}
-                    label={label.name}
-                    checked={friend.labelIds.includes(label.id)}
+                    key={tag.id}
+                    label={tag.name}
+                    checked={friend.tagIds.includes(tag.id)}
                     checkedColor={'#DCEDC8'}
                     normalColor={'#FFF8E1'}
                     onPress={() => {
                       // friend を更新
-                      if (friend.labelIds.includes(label.id)) {
+                      if (friend.tagIds.includes(tag.id)) {
                         setFriend((previousState) => ({
                           ...previousState,
-                          labelIds: previousState.labelIds.filter((id) => id !== label.id),
+                          tagIds: previousState.tagIds.filter((id) => id !== tag.id),
                         }));
                       } else {
                         setFriend((previousState) => ({
                           ...previousState,
-                          labelIds: [...previousState.labelIds, label.id],
+                          tagIds: [...previousState.tagIds, tag.id],
                         }));
                       }
                     }}
@@ -378,17 +365,6 @@ const localStyles = StyleSheet.create({
   textButton: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-  },
-
-  textMemoInput: {
-    minHeight: 100,
-    height: 'auto',
-    fontSize: 16,
-    width: '100%',
-    paddingHorizontal: 8,
-    paddingVertical: 8,
-    borderRadius: 5,
-    backgroundColor: '#F5F5F5',
   },
 });
 

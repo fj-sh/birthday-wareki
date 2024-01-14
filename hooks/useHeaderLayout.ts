@@ -1,4 +1,3 @@
-import { type HeaderListItem, isHeader } from '../constants/sample';
 import { useConst } from './useConst';
 import { useMounted } from './useMounted';
 import { createRef, useMemo } from 'react';
@@ -6,6 +5,7 @@ import { type MeasureableAnimatedViewRef } from '../components/MeasureableAnimat
 import { useDerivedValue } from 'react-native-reanimated';
 import { type LayoutRectangle } from 'react-native';
 import { type Friend } from '../lib/interfaces/friend';
+import { type HeaderListItem, isHeader } from '../lib/interfaces/headerListItem';
 
 interface UseHeaderLayoutParams {
   headers: HeaderListItem[];

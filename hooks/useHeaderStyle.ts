@@ -1,5 +1,5 @@
-import { type LayoutRectangle, useColorScheme } from 'react-native';
-import Animated, { Extrapolation } from 'react-native-reanimated';
+import { type LayoutRectangle } from 'react-native';
+import { Extrapolation } from 'react-native-reanimated';
 import { type SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 
 interface UseHeaderStyleParams {
@@ -28,6 +28,15 @@ const useHeaderStyle = ({
   const rIndicatorStyle = useAnimatedStyle(() => {
     const headersData = headersLayoutX.value;
 
+    // 確認 headersLayoutY と headersData が少なくとも2つの要素を持っている
+    if (headersLayoutY.length < 2 || headersData.length < 2) {
+      return {
+        width: 0,
+        height: 3,
+        backgroundColor: colorSchemeName === 'dark' ? '#757575' : 'black',
+      };
+    }
+
     const width = interpolate(
       contentOffsetY.value,
       headersLayoutY.map(({ value }) => value),
@@ -44,6 +53,11 @@ const useHeaderStyle = ({
 
   const rHeaderListStyle = useAnimatedStyle(() => {
     const headersData = headersLayoutX.value;
+
+    // 確認 headersLayoutY と headersData が少なくとも2つの要素を持っている
+    if (headersLayoutY.length < 2 || headersData.length < 2) {
+      return { transform: [{ translateX: 0 }] };
+    }
 
     const translateX = interpolate(
       contentOffsetY.value,

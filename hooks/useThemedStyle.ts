@@ -17,6 +17,11 @@ const useThemedStyle = () => {
     colorScheme === 'dark' && localStyles.darkTextInput,
   ];
 
+  const memoInputStyle = [
+    localStyles.textMemoInput,
+    colorScheme === 'dark' && localStyles.darkTextInput,
+  ];
+
   const buttonBackgroundColorStyle = [
     localStyles.buttonBackgroundColor,
     colorScheme === 'dark' && localStyles.darkButtonBackgroundColor,
@@ -27,6 +32,7 @@ const useThemedStyle = () => {
     labelTextStyle,
     textInputStyle,
     buttonBackgroundColorStyle,
+    memoInputStyle,
   };
 };
 
@@ -66,6 +72,17 @@ const localStyles = StyleSheet.create({
   darkTextInput: {
     backgroundColor: '#333',
     color: '#fff',
+  },
+
+  textMemoInput: {
+    minHeight: 100,
+    height: 'auto',
+    fontSize: 16,
+    width: '100%',
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    borderRadius: 5,
+    backgroundColor: '#F5F5F5',
   },
 });
 

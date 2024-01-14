@@ -4,6 +4,7 @@ import { Button, Pressable, useColorScheme } from 'react-native';
 
 import Colors from '../../constants/Colors';
 import { i18n } from '../../lib/i18n/i18n';
+import Register from './register';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -36,12 +37,12 @@ export default function TabLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen
         name="register"
-        options={{
-          title: i18n.t('register.add'),
-          headerRight: () => (
-            <Button title={i18n.t('register.save')} onPress={onSaveButtonPress}></Button>
-          ),
-        }}
+        // options={{
+        //   title: i18n.t('register.add'),
+        //   headerRight: () => (
+        //     <Button title={i18n.t('register.save')} onPress={onSaveButtonPress}></Button>
+        //   ),
+        // }}
       />
     </Stack>
   );

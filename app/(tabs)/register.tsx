@@ -3,18 +3,43 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { BirthdayRegisterScreen } from '../../components/screens/BirthdayRegisterScreen';
 import { type Friend } from '../../lib/interfaces/friend';
+import { useNavigation, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { i18n } from '../../lib/i18n/i18n';
+import { Button } from 'react-native';
+import { useFriendStore } from '../../lib/store/friendStore';
+import { complementFriend } from '../../lib/feat/complementFriend';
 
 export default function Register() {
-  const initFriend: Friend = {
+  const { friends, setFriends } = useFriendStore();
+  const [friend, setFriend] = useState<Friend>({
     id: uuidv4(),
     name: '',
     isBirthYearUnknown: false,
     birthYear: '',
     birthMonth: '',
     birthDay: '',
-    labelIds: ['1', '2'],
+    tagIds: [],
     memo: '',
     age: '',
+  });
+  const navigation = useNavigation();
+  const router = useRouter();
+
+  const onSaveButtonPress = () => {
+    const completeFriend = complementFriend(friend);
+    setFriends([...friends, completeFriend]);
+    router.back();
   };
-  return <BirthdayRegisterScreen friend={initFriend} />;
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: i18n.t('register.add'),
+      headerRight: () => (
+        <Button title={i18n.t('register.save')} onPress={onSaveButtonPress}></Button>
+      ),
+    });
+  }, [friend]);
+
+  return <BirthdayRegisterScreen friend={friend} setFriend={setFriend} />;
 }
