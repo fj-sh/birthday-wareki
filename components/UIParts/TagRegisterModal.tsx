@@ -1,4 +1,17 @@
-import { Alert, Modal, Pressable, StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  TextInput,
+} from 'react-native';
+import { useThemedStyle } from '../../hooks/useThemedStyle';
+import { Label } from './Label';
+import { useState } from 'react';
 
 interface TagRegisterModalProps {
   modalVisible: boolean;
@@ -6,9 +19,12 @@ interface TagRegisterModalProps {
 }
 
 const TagRegisterModal = (props: TagRegisterModalProps) => {
+  const [tagName, setTagName] = useState('');
+  const { textInputStyle, buttonBackgroundColorStyle, viewBackgroundColorStyle } = useThemedStyle();
+
   return (
     <Modal
-      animationType="fade"
+      animationType="slide"
       transparent={true}
       visible={props.modalVisible}
       onRequestClose={() => {
@@ -25,15 +41,26 @@ const TagRegisterModal = (props: TagRegisterModalProps) => {
       >
         <>
           <View style={styles.modalBackground}></View>
-          <View style={styles.modalView} onStartShouldSetResponder={() => true}>
-            <Text style={styles.modalText}>Hello World!</Text>
+          <View
+            style={[styles.modalView, viewBackgroundColorStyle]}
+            onStartShouldSetResponder={() => true}
+          >
+            <Label text={'タグを入力'} position={'left'} />
+            <TextInput
+              style={textInputStyle}
+              value={tagName}
+              placeholder={'タグを入力'}
+              onChangeText={(text: string) => {
+                setTagName(text);
+              }}
+            />
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, buttonBackgroundColorStyle]}
               onPress={() => {
                 props.setModalVisible(!props.modalVisible);
               }}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>タグを追加</Text>
             </Pressable>
           </View>
         </>
@@ -46,6 +73,7 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
+    marginBottom: 140,
     alignItems: 'center',
     marginTop: 22,
   },
@@ -57,11 +85,12 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   modalView: {
+    width: '80%',
+    height: 200,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 30,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -71,17 +100,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+
   button: {
-    borderRadius: 20,
+    marginTop: 20,
+    borderRadius: 6,
     padding: 10,
     elevation: 2,
   },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
+
   textStyle: {
     color: 'white',
     fontWeight: 'bold',

@@ -30,7 +30,6 @@ const headers = data.filter(isHeader) as HeaderListItem[];
 const FriendListScreen = () => {
   const { friends } = useFriendStore();
 
-  console.log('friends', friends);
   const [searchText, setSearchText] = useState('');
   const colorScheme = useColorScheme();
   const contentOffsetY = useSharedValue(0);
