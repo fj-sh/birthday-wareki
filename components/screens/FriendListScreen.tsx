@@ -29,15 +29,8 @@ import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListIt
 
 const FriendListScreen = () => {
   const { friends } = useFriendStore();
+  const [filteredFriends, setFilteredFriends] = useState<Friend[]>(friends);
   const [friendsAndHeaders, setFriendsAndHeaders] = useState<Array<Friend | HeaderListItem>>([]);
-
-  useEffect(() => {
-    const friendsAndHeaders = sortFriendAndHeaderList(friends);
-    setFriendsAndHeaders(friendsAndHeaders);
-  }, [friends]);
-
-  const headers = friendsAndHeaders.filter(isHeader) as HeaderListItem[];
-
   const [searchText, setSearchText] = useState('');
   const colorScheme = useColorScheme();
   const { textInputStyle } = useThemedStyle();
@@ -45,6 +38,22 @@ const FriendListScreen = () => {
   const { bottom: safeBottom } = useSafeAreaInsets();
   const isScrolling = useSharedValue(false);
   const router = useRouter();
+
+  const headers = friendsAndHeaders.filter(isHeader) as HeaderListItem[];
+
+  useEffect(() => {
+    const friendsAndHeaders = sortFriendAndHeaderList(filteredFriends);
+    setFriendsAndHeaders(friendsAndHeaders);
+  }, [filteredFriends]);
+
+  console.log('filteredFriends', filteredFriends, searchText);
+  useEffect(() => {
+    setFilteredFriends(
+      friends.filter((friend) => {
+        return friend.name.includes(searchText) || friend.name.includes(searchText);
+      })
+    );
+  }, [searchText]);
 
   const textInputContainerStyle = [
     localStyles.textInputContainer,
@@ -73,13 +82,10 @@ const FriendListScreen = () => {
 
   const onSelectHeaderItem = useCallback(
     (headerItem: string) => {
-      console.log('onSelectHeaderItem:', headerItem);
       const headerIndex = friendsAndHeaders.findIndex(
         (_item) => (_item as HeaderListItem).header === headerItem
       );
 
-      console.log('friendsAndHeaders:', friendsAndHeaders);
-      console.log('headerIndex:', headerIndex);
       flatlistRef.current?.scrollToIndex({
         index: headerIndex,
       });
@@ -115,8 +121,8 @@ const FriendListScreen = () => {
           <EvilIcons name="search" size={24} color="#BDBDBD" style={localStyles.icon} />
           <TextInput
             style={textInputStyle}
-            onEndEditing={(e) => {
-              onChangeSearchText(e.nativeEvent.text);
+            onChangeText={(text) => {
+              onChangeSearchText(text);
             }}
             placeholder={i18n.t('birthdayList.searchPlaceholder')}
           />
