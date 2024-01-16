@@ -11,3 +11,10 @@
 - 通知を Chip の一覧で作成する
 - タグの編集と削除、追加ができるようにする
 - 他のアプリへの DeepLink をつける（一度リリースしたあとでよい）
+
+## E2E
+
+```shell
+npx expo start --clear --tunnel
+maestro test ./e2e/sample.yml
+```

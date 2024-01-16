@@ -47,7 +47,7 @@ const BottomFloatingButton = ({ style, onSelect }: BottomFloatingButtonProps) =>
   return (
     <GestureDetector gesture={gesture}>
       {/* Animated View representing the floating button */}
-      <Animated.View style={[style, rHighlightedStyle]}>
+      <Animated.View style={[style, rHighlightedStyle]} testID="floatingButton">
         {/* Absolute positioned view for the 'add' icon */}
         <Animated.View style={[StyleSheet.absoluteFill, styles.center]}>
           <MaterialIcons name={'add'} size={28} color={Palette.text} />

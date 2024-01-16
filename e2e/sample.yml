@@ -1,0 +1,8 @@
+appId: host.exp.Exponent
+---
+- launchApp
+- tapOn: "wareki-birthday"
+- tapOn:
+    id: "floatingButton"
+- tapOn:
+    point: "50%,46%"

@@ -122,6 +122,7 @@ const BirthdayRegisterScreen = ({ friend, setFriend }: FriendRegisterScreenProps
                     name: text,
                   }));
                 }}
+                testID="nameInput"
               />
 
               <Label text={'生年月日'} position={'left'} />
@@ -144,6 +145,7 @@ const BirthdayRegisterScreen = ({ friend, setFriend }: FriendRegisterScreenProps
                     maxLength={4}
                     value={friend.birthYear}
                     keyboardType={'number-pad'}
+                    testID="birthYearInput"
                   />
                   <Text style={birthdayInputSeparatorStyle}>/</Text>
                 </Animated.View>

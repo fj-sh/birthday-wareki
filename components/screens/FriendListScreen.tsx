@@ -28,7 +28,7 @@ import { sortFriendAndHeaderList } from '../../lib/feat/sort';
 import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListItem';
 
 const FriendListScreen = () => {
-  const { friends } = useFriendStore();
+  const { friends, setFriends } = useFriendStore();
   const [filteredFriends, setFilteredFriends] = useState<Friend[]>(friends);
   const [friendsAndHeaders, setFriendsAndHeaders] = useState<Array<Friend | HeaderListItem>>([]);
   const [searchText, setSearchText] = useState('');
@@ -42,11 +42,14 @@ const FriendListScreen = () => {
   const headers = friendsAndHeaders.filter(isHeader) as HeaderListItem[];
 
   useEffect(() => {
+    setFilteredFriends(friends);
+  }, [friends]);
+
+  useEffect(() => {
     const friendsAndHeaders = sortFriendAndHeaderList(filteredFriends);
     setFriendsAndHeaders(friendsAndHeaders);
   }, [filteredFriends]);
 
-  console.log('filteredFriends', filteredFriends, searchText);
   useEffect(() => {
     setFilteredFriends(
       friends.filter((friend) => {
@@ -158,7 +161,6 @@ const FriendListScreen = () => {
         </Animated.View>
         <Animated.View style={rIndicatorStyle} />
       </>
-      {/* List */}
       <FlatList
         onScroll={(e) => {
           contentOffsetY.value = e.nativeEvent.contentOffset.y;
@@ -193,7 +195,7 @@ const FriendListScreen = () => {
               simultaneousHandlers={flatlistRef}
               friend={friend}
               onDismiss={() => {
-                console.log('onDismiss');
+                setFriends(friends.filter((item) => item.id !== friend.id));
               }}
               key={friend.id}
             />
