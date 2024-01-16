@@ -3,12 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { BirthdayRegisterScreen } from '../../components/screens/BirthdayRegisterScreen';
 import { type Friend } from '../../lib/interfaces/friend';
-import { useNavigation, useRouter } from 'expo-router';
+import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { i18n } from '../../lib/i18n/i18n';
 import { Button } from 'react-native';
 import { useFriendStore } from '../../lib/store/friendStore';
 import { complementFriend } from '../../lib/feat/complementFriend';
+import { RouteProp, useRoute } from '@react-navigation/core';
 
 export default function Register() {
   const { friends, setFriends } = useFriendStore();
@@ -25,6 +26,16 @@ export default function Register() {
   });
   const navigation = useNavigation();
   const router = useRouter();
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params.id) {
+      const foundFriend = friends.find((friend) => friend.id === params.id);
+      if (foundFriend) {
+        setFriend(foundFriend);
+      }
+    }
+  }, [params.id]);
 
   const onSaveButtonPress = () => {
     const completeFriend = complementFriend(friend);

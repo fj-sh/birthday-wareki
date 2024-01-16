@@ -114,7 +114,11 @@ const FriendListScreen = () => {
   }, []);
 
   const onAddButtonPress = useCallback(() => {
-    router.push('/(tabs)/register');
+    router.push({ pathname: '/(tabs)/register', params: { id: '' } }); // friend: null
+  }, []);
+
+  const onEditButtonPress = useCallback((friend: Friend) => {
+    router.push({ pathname: '/(tabs)/register', params: { id: friend.id } });
   }, []);
 
   return (
@@ -196,6 +200,9 @@ const FriendListScreen = () => {
               friend={friend}
               onDismiss={() => {
                 setFriends(friends.filter((item) => item.id !== friend.id));
+              }}
+              onTap={() => {
+                onEditButtonPress(friend);
               }}
               key={friend.id}
             />

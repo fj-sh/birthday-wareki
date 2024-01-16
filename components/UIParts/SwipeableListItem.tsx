@@ -3,8 +3,10 @@ import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
   type PanGestureHandlerProps,
+  TapGestureHandler,
+  TapGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
-import { Alert, Dimensions, StyleSheet, Text } from 'react-native';
+import { Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -13,18 +15,19 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { ItemHeight } from '../../constants/itemHeight';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
   onDismiss?: (task: Friend) => void;
+  onTap: () => void;
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.3;
 
-const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItemProps) => {
+const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: ListItemProps) => {
   const translateX = useSharedValue(0);
   const itemHeight = useSharedValue(ItemHeight);
   const marginVertical = useSharedValue(0);
@@ -103,9 +106,17 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers }: ListItem
       <Animated.View style={[styles.iconContainer, rIconContainerStyle]}>
         <FontAwesome5 name={'trash-alt'} size={ItemHeight * 0.4} color={'red'} />
       </Animated.View>
+
       <PanGestureHandler simultaneousHandlers={simultaneousHandlers} onGestureEvent={panGesture}>
         <Animated.View style={[styles.friend, rStyle]}>
-          <Text style={styles.friendTitle}>{friend.name}</Text>
+          <View style={styles.contentAndIconContainer}>
+            <View style={styles.contentContainer}>
+              <Text style={styles.friendTitle}>{friend.name}</Text>
+            </View>
+            <TouchableWithoutFeedback onPress={onTap}>
+              <Entypo name="chevron-right" size={24} color="gray" />
+            </TouchableWithoutFeedback>
+          </View>
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
@@ -118,6 +129,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  contentContainer: {
+    flexDirection: 'column',
+  },
+  contentAndIconContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingRight: 8,
+  },
+
   friend: {
     width: '95%',
     height: ItemHeight - 20,
@@ -138,6 +159,7 @@ const styles = StyleSheet.create({
   },
   friendTitle: {
     fontSize: 16,
+    fontWeight: 'bold',
   },
   iconContainer: {
     height: ItemHeight,
