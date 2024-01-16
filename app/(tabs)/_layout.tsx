@@ -8,11 +8,6 @@ import Register from './register';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const router = useRouter();
-
-  const onSaveButtonPress = () => {
-    router.back();
-  };
 
   return (
     <Stack

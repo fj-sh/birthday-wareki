@@ -9,7 +9,6 @@ import { i18n } from '../../lib/i18n/i18n';
 import { Button } from 'react-native';
 import { useFriendStore } from '../../lib/store/friendStore';
 import { complementFriend } from '../../lib/feat/complementFriend';
-import { RouteProp, useRoute } from '@react-navigation/core';
 
 export default function Register() {
   const { friends, setFriends } = useFriendStore();

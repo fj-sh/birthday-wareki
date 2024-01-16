@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 

@@ -1,5 +1,3 @@
-import { type Group } from './group';
-
 export enum ReminderSetting {
   OnTheDay = 'OnTheDay',
   OneDayBefore = 'OneDayBefore',
