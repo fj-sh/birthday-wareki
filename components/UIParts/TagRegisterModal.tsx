@@ -46,16 +46,16 @@ const TagRegisterModal = (props: TagRegisterModalProps) => {
       }}
     >
       <TouchableOpacity
-        style={styles.centeredView}
+        style={modalStyles.centeredView}
         activeOpacity={1}
         onPressOut={() => {
           props.setModalVisible(!props.modalVisible);
         }}
       >
         <>
-          <View style={styles.modalBackground}></View>
+          <View style={modalStyles.modalBackground}></View>
           <View
-            style={[styles.modalView, viewBackgroundColorStyle]}
+            style={[modalStyles.modalView, viewBackgroundColorStyle]}
             onStartShouldSetResponder={() => true}
           >
             <Label text={'タグを入力'} position={'left'} />
@@ -67,8 +67,11 @@ const TagRegisterModal = (props: TagRegisterModalProps) => {
                 setTagName(text);
               }}
             />
-            <Pressable style={[styles.button, buttonBackgroundColorStyle]} onPress={onPressAddTag}>
-              <Text style={styles.textStyle}>タグを追加</Text>
+            <Pressable
+              style={[modalStyles.button, buttonBackgroundColorStyle]}
+              onPress={onPressAddTag}
+            >
+              <Text style={modalStyles.textStyle}>タグを追加</Text>
             </Pressable>
           </View>
         </>
@@ -77,7 +80,7 @@ const TagRegisterModal = (props: TagRegisterModalProps) => {
   );
 };
 
-const styles = StyleSheet.create({
+export const modalStyles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
