@@ -23,18 +23,20 @@ const SettingsModalScreen = () => {
       </View>
       <View style={localStyles.settingsContainer}>
         <Label text={'通知の設定'} position={'left'} />
-        {reminderSettings.map((item) => (
-          <CheckableChip
-            key={item.label}
-            label={item.name}
-            checked={item.checked}
-            checkedColor={'#DCEDC8'}
-            normalColor={'#FFF8E1'}
-            onPress={() => {
-              updateSetting(item.label, !item.checked);
-            }}
-          />
-        ))}
+        <View style={localStyles.reminderChips}>
+          {reminderSettings.map((item) => (
+            <CheckableChip
+              key={item.label}
+              label={item.name}
+              checked={item.checked}
+              checkedColor={'#DCEDC8'}
+              normalColor={'#FFF8E1'}
+              onPress={() => {
+                updateSetting(item.label, !item.checked);
+              }}
+            />
+          ))}
+        </View>
       </View>
     </View>
   );
@@ -48,6 +50,13 @@ const localStyles = StyleSheet.create({
   },
   settingsContainer: {
     marginVertical: 16,
+  },
+  reminderChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    gap: 10,
   },
   tagList: {
     flexGrow: 0,
