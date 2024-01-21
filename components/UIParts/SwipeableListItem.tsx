@@ -3,8 +3,6 @@ import {
   PanGestureHandler,
   type PanGestureHandlerGestureEvent,
   type PanGestureHandlerProps,
-  TapGestureHandler,
-  TapGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import { Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import Animated, {

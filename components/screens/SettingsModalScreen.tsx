@@ -24,6 +24,7 @@ const SettingsModalScreen = () => {
   const { tags, setTags } = useTagStore();
 
   const { reminderSettings, updateSetting } = useReminderSettingsStore();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [editTag, setEditTag] = useState<Tag | null>(null);
   const onTagPress = (tag: Tag) => {
@@ -111,7 +112,8 @@ const SettingsModalScreen = () => {
               checkedColor={'#DCEDC8'}
               normalColor={'#FFF8E1'}
               onPress={() => {
-                updateSetting(item.label, !item.checked);
+                const updatedItemChecked = !item.checked;
+                updateSetting(item.label, updatedItemChecked);
               }}
             />
           ))}

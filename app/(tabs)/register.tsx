@@ -12,6 +12,7 @@ import { complementFriend } from '../../lib/feat/complementFriend';
 
 export default function Register() {
   const { friends, setFriends } = useFriendStore();
+
   const [friend, setFriend] = useState<Friend>({
     id: uuidv4(),
     name: '',
