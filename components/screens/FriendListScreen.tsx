@@ -234,6 +234,8 @@ const localStyles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   textInputContainer: {
+    width: '85%',
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#E0E0E0',
@@ -241,6 +243,7 @@ const localStyles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 6,
     marginHorizontal: 10,
+    marginRight: 50,
     backgroundColor: '#F5F5F5',
   },
   icon: {
@@ -250,7 +253,7 @@ const localStyles = StyleSheet.create({
   textInput: {
     height: 30,
     fontSize: 16,
-    width: '85%',
+    width: '100%',
     marginVertical: 6,
     paddingHorizontal: 4,
     borderRadius: 5,
