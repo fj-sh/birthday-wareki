@@ -42,6 +42,5 @@ export const scheduleNotification = async (
 
 const getAllScheduledNotifications = async () => {
   const allScheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-  console.log('通知設定:', allScheduledNotifications);
   return allScheduledNotifications;
 };

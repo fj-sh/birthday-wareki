@@ -15,6 +15,8 @@ import Animated, {
 
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { ItemHeight } from '../../constants/itemHeight';
+import { BirthdayText } from './FriendListItems/BirthdayText';
+import { WarekiText } from './FriendListItems/WarekiText';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
@@ -110,6 +112,8 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
           <View style={styles.contentAndIconContainer}>
             <View style={styles.contentContainer}>
               <Text style={styles.friendTitle}>{friend.name}</Text>
+              <BirthdayText friend={friend} />
+              <WarekiText friend={friend} />
             </View>
             <TouchableWithoutFeedback onPress={onTap}>
               <Entypo name="chevron-right" size={24} color="gray" />

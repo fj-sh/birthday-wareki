@@ -2,6 +2,9 @@ import { StyleSheet, useColorScheme } from 'react-native';
 
 const useThemedStyle = () => {
   const colorScheme = useColorScheme();
+
+  const textStyle = [localStyles.text, colorScheme === 'dark' && localStyles.darkText];
+
   const labelTextStyle = [
     localStyles.labelText,
     colorScheme === 'dark' && localStyles.darkLabelText,
@@ -28,6 +31,7 @@ const useThemedStyle = () => {
   ];
 
   return {
+    textStyle,
     viewBackgroundColorStyle,
     labelTextStyle,
     textInputStyle,
@@ -37,6 +41,13 @@ const useThemedStyle = () => {
 };
 
 const localStyles = StyleSheet.create({
+  text: {
+    fontSize: 16,
+  },
+  darkText: {
+    color: '#fff',
+  },
+
   labelText: {
     fontSize: 16,
   },

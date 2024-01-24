@@ -23,6 +23,7 @@ export default function Register() {
     birthYear: '',
     birthMonth: '',
     birthDay: '',
+    warekiBirthday: '',
     tagIds: [],
     memo: '',
     age: '',
@@ -44,7 +45,7 @@ export default function Register() {
     const completeFriend = complementFriend(friend);
     setFriends([...friends, completeFriend]);
     incrementUserActionCount();
-    if (userActionCount % 5 === 0) {
+    if (userActionCount !== 0 && userActionCount % 5 === 0) {
       requestReview();
     }
     router.back();
