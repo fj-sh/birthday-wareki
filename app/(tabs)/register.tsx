@@ -10,10 +10,12 @@ import { Button } from 'react-native';
 import { useFriendStore } from '../../lib/store/friendStore';
 import { complementFriend } from '../../lib/feat/complementFriend';
 import { useUserActionCountStore } from '../../lib/store/userActionCountStore';
+import { useStoreReview } from '../../hooks/useStoreReview';
 
 export default function Register() {
   const { friends, setFriends } = useFriendStore();
-  const { incrementUserActionCount } = useUserActionCountStore();
+  const { userActionCount, incrementUserActionCount } = useUserActionCountStore();
+  const { requestReview } = useStoreReview();
   const [friend, setFriend] = useState<Friend>({
     id: uuidv4(),
     name: '',
@@ -42,6 +44,9 @@ export default function Register() {
     const completeFriend = complementFriend(friend);
     setFriends([...friends, completeFriend]);
     incrementUserActionCount();
+    if (userActionCount % 5 === 0) {
+      requestReview();
+    }
     router.back();
   };
 
