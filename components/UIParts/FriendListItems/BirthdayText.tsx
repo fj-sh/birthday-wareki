@@ -24,9 +24,9 @@ const BirthdayText = memo((props: BirthdayTextProps) => {
   return (
     <View style={localStyles.container}>
       <Text style={textStyle}>{getBirthYear(props.friend.birthYear)}</Text>
-      <Text>/</Text>
+      <Text style={textStyle}>/</Text>
       <Text style={textStyle}>{getBirthMonth(props.friend.birthMonth)}</Text>
-      <Text>/</Text>
+      <Text style={textStyle}>/</Text>
       <Text style={textStyle}>{getBirthDay(props.friend.birthDay)}</Text>
     </View>
   );

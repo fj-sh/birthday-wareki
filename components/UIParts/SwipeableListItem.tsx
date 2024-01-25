@@ -17,6 +17,7 @@ import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { ItemHeight } from '../../constants/itemHeight';
 import { BirthdayText } from './FriendListItems/BirthdayText';
 import { WarekiText } from './FriendListItems/WarekiText';
+import { useThemedStyle } from '../../hooks/useThemedStyle';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
@@ -32,6 +33,8 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
   const itemHeight = useSharedValue(ItemHeight);
   const marginVertical = useSharedValue(0);
   const opacity = useSharedValue(1);
+
+  const { textStyle, viewBackgroundColorStyle, lightViewBackgroundColorStyle } = useThemedStyle();
 
   const canDelete = () => {
     Alert.alert(
@@ -102,16 +105,18 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
   });
 
   return (
-    <Animated.View style={[styles.taskContainer, rFriendContainerStyle]}>
+    <Animated.View
+      style={[styles.taskContainer, rFriendContainerStyle, lightViewBackgroundColorStyle]}
+    >
       <Animated.View style={[styles.iconContainer, rIconContainerStyle]}>
         <FontAwesome5 name={'trash-alt'} size={ItemHeight * 0.4} color={'red'} />
       </Animated.View>
 
       <PanGestureHandler simultaneousHandlers={simultaneousHandlers} onGestureEvent={panGesture}>
-        <Animated.View style={[styles.friend, rStyle]}>
+        <Animated.View style={[styles.friend, rStyle, viewBackgroundColorStyle]}>
           <View style={styles.contentAndIconContainer}>
             <View style={styles.contentContainer}>
-              <Text style={styles.friendTitle}>{friend.name}</Text>
+              <Text style={[styles.friendTitle, textStyle]}>{friend.name}</Text>
               <BirthdayText friend={friend} />
               <WarekiText friend={friend} />
             </View>
