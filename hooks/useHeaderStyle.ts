@@ -33,7 +33,7 @@ const useHeaderStyle = ({
       return {
         width: 0,
         height: 3,
-        backgroundColor: colorSchemeName === 'dark' ? '#757575' : 'black',
+        backgroundColor: colorSchemeName === 'dark' ? '#757575' : '#9E9E9E',
       };
     }
 
@@ -47,7 +47,7 @@ const useHeaderStyle = ({
     return {
       width,
       height: 3,
-      backgroundColor: colorSchemeName === 'dark' ? '#757575' : 'black',
+      backgroundColor: colorSchemeName === 'dark' ? '#757575' : '#9E9E9E',
     };
   }, [headersLayoutY]);
 

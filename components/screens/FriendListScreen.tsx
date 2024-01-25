@@ -37,6 +37,12 @@ const FriendListScreen = () => {
   const contentOffsetY = useSharedValue(0);
   const { bottom: safeBottom } = useSafeAreaInsets();
   const isScrolling = useSharedValue(false);
+  const {
+    textStyle,
+    viewBackgroundColorStyle,
+    lightViewBackgroundColorStyle,
+    iconBackgroundColorStyle,
+  } = useThemedStyle();
   const router = useRouter();
 
   const headers = friendsAndHeaders.filter(isHeader) as HeaderListItem[];
@@ -122,9 +128,9 @@ const FriendListScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={localStyles.container}>
+    <SafeAreaView style={[localStyles.container, lightViewBackgroundColorStyle]}>
       <>
-        <View style={textInputContainerStyle}>
+        <View style={[textInputContainerStyle, iconBackgroundColorStyle]}>
           <EvilIcons name="search" size={24} color="#BDBDBD" style={localStyles.icon} />
           <TextInput
             style={textInputStyle}
@@ -135,7 +141,11 @@ const FriendListScreen = () => {
           />
         </View>
         {/* Animated Header Section */}
-        <Animated.View style={[{ flexDirection: 'row' }, rHeaderListStyle]}>
+        <Animated.ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={[{ flexDirection: 'row', height: 80 }, rHeaderListStyle, viewBackgroundColorStyle]}
+        >
           {headers.map(({ header }, index) => {
             return (
               <MeasureableAnimatedView
@@ -149,12 +159,15 @@ const FriendListScreen = () => {
                 }}
               >
                 <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    letterSpacing: 1,
-                  }}
+                  style={[
+                    {
+                      fontSize: 14,
+                      fontWeight: 'bold',
+                      textTransform: 'uppercase',
+                      letterSpacing: 1,
+                    },
+                    textStyle,
+                  ]}
                   key={`${header}-${index}-header-text`}
                 >
                   {header}
@@ -162,7 +175,7 @@ const FriendListScreen = () => {
               </MeasureableAnimatedView>
             );
           })}
-        </Animated.View>
+        </Animated.ScrollView>
         <Animated.View style={rIndicatorStyle} />
       </>
       <FlatList
@@ -235,7 +248,7 @@ const localStyles = StyleSheet.create({
   },
   textInputContainer: {
     width: '85%',
-    height: 40,
+    height: 43,
     flexDirection: 'row',
     alignItems: 'center',
     borderColor: '#E0E0E0',

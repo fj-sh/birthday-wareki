@@ -20,6 +20,11 @@ const useThemedStyle = () => {
     colorScheme === 'dark' && localStyles.lightDarkViewBackgroundColor,
   ];
 
+  const iconBackgroundColorStyle = [
+    localStyles.iconBackgroundColor,
+    colorScheme === 'dark' && localStyles.darkIconBackgroundColor,
+  ];
+
   const textInputStyle = [
     localStyles.textInput,
     colorScheme === 'dark' && localStyles.darkTextInput,
@@ -41,6 +46,7 @@ const useThemedStyle = () => {
     lightViewBackgroundColorStyle,
     labelTextStyle,
     textInputStyle,
+    iconBackgroundColorStyle,
     buttonBackgroundColorStyle,
     memoInputStyle,
   };
@@ -93,6 +99,13 @@ const localStyles = StyleSheet.create({
   darkTextInput: {
     backgroundColor: '#333',
     color: '#fff',
+  },
+
+  iconBackgroundColor: {
+    backgroundColor: '#BDBDBD',
+  },
+  darkIconBackgroundColor: {
+    backgroundColor: '#333',
   },
 
   textMemoInput: {
