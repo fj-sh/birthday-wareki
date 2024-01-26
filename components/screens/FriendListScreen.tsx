@@ -59,7 +59,7 @@ const FriendListScreen = () => {
   useEffect(() => {
     setFilteredFriends(
       friends.filter((friend) => {
-        return friend.name.includes(searchText) || friend.name.includes(searchText);
+        return friend.name.includes(searchText) || friend.memo.includes(searchText);
       })
     );
   }, [searchText]);

@@ -16,8 +16,10 @@ import Animated, {
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 import { ItemHeight } from '../../constants/itemHeight';
 import { BirthdayText } from './FriendListItems/BirthdayText';
-import { WarekiText } from './FriendListItems/WarekiText';
 import { useThemedStyle } from '../../hooks/useThemedStyle';
+import { Eto } from './Eto';
+import { Wareki } from './Wareki';
+import { trimText } from '../../lib/feat/trimText';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
@@ -118,7 +120,13 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
             <View style={styles.contentContainer}>
               <Text style={[styles.friendTitle, textStyle]}>{friend.name}</Text>
               <BirthdayText friend={friend} />
-              <WarekiText friend={friend} />
+              <View style={{ flexDirection: 'row', gap: 10 }}>
+                <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
+                <Eto year={friend.birthYear} />
+              </View>
+              <View style={{ width: '95%' }}>
+                <Text style={[textStyle]}>{trimText(friend.memo, 50)}</Text>
+              </View>
             </View>
             <TouchableWithoutFeedback onPress={onTap}>
               <Entypo name="chevron-right" size={24} color="gray" />
@@ -138,6 +146,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexDirection: 'column',
+    gap: 3,
   },
   contentAndIconContainer: {
     flexDirection: 'row',

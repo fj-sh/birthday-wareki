@@ -43,7 +43,14 @@ export default function Register() {
 
   const onSaveButtonPress = () => {
     const completeFriend = complementFriend(friend);
-    setFriends([...friends, completeFriend]);
+
+    const index = friends.findIndex((f) => f.id === completeFriend.id);
+    if (index !== -1) {
+      friends[index] = completeFriend;
+      setFriends([...friends]);
+    } else {
+      setFriends([...friends, completeFriend]);
+    }
     incrementUserActionCount();
     if (userActionCount !== 0 && userActionCount % 5 === 0) {
       requestReview();
