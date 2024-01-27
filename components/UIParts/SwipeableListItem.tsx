@@ -40,8 +40,8 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
 
   const canDelete = () => {
     Alert.alert(
-      'Delete Friend',
-      `Are you sure you want to delete ${friend.name}?`,
+      '友達の削除',
+      `${friend.name}を削除してもよろしいですか？`,
       [
         {
           text: 'Cancel',
@@ -51,7 +51,7 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
           },
         },
         {
-          text: 'Delete',
+          text: '削除',
           style: 'destructive',
           onPress: () => {
             translateX.value = withTiming(-SCREEN_WIDTH);
@@ -111,7 +111,7 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
       style={[styles.taskContainer, rFriendContainerStyle, lightViewBackgroundColorStyle]}
     >
       <Animated.View style={[styles.iconContainer, rIconContainerStyle]}>
-        <FontAwesome5 name={'trash-alt'} size={ItemHeight * 0.4} color={'red'} />
+        <FontAwesome5 name={'trash-alt'} size={ItemHeight * 0.6} color={'red'} />
       </Animated.View>
 
       <PanGestureHandler simultaneousHandlers={simultaneousHandlers} onGestureEvent={panGesture}>
@@ -124,8 +124,8 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
                 <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
                 <Eto year={friend.birthYear} />
               </View>
-              <View style={{ width: '95%' }}>
-                <Text style={[textStyle]}>{trimText(friend.memo, 50)}</Text>
+              <View style={{ width: '95%', height: 40 }}>
+                <Text style={[textStyle]}>{trimText(friend.memo, 45)}</Text>
               </View>
             </View>
             <TouchableWithoutFeedback onPress={onTap}>

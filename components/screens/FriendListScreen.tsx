@@ -26,6 +26,7 @@ import { useFriendStore } from '../../lib/store/friendStore';
 import { useThemedStyle } from '../../hooks/useThemedStyle';
 import { sortFriendAndHeaderList } from '../../lib/feat/sort';
 import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListItem';
+import { AdmobNativeAdvance } from '../UIParts/AdmobNativeAdvance';
 
 const FriendListScreen = () => {
   const { friends, setFriends } = useFriendStore();
@@ -222,13 +223,14 @@ const FriendListScreen = () => {
           );
         }}
       />
+      <AdmobNativeAdvance />
       <BottomFloatingButton
         onSelect={onAddButtonPress}
         style={[
           {
             position: 'absolute',
-            bottom: safeBottom / 2,
-            right: 16,
+            bottom: safeBottom + 10,
+            right: 24,
             height: 64,
             aspectRatio: 1,
             backgroundColor: colorScheme === 'dark' ? '#455A64' : Palette.primary,

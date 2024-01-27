@@ -51,14 +51,12 @@ const SettingsModalScreen = () => {
       return;
     }
     Alert.alert(
-      'Confirm Delete',
-      'Are you sure you want to delete this tag?',
+      '削除の確認',
+      'タグを削除してもよろしいですか？',
       [
         {
           text: 'Cancel',
-          onPress: () => {
-            console.log('Cancel Pressed');
-          },
+          onPress: () => {},
           style: 'cancel',
         },
         {
