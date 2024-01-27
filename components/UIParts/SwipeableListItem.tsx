@@ -4,7 +4,15 @@ import {
   type PanGestureHandlerGestureEvent,
   type PanGestureHandlerProps,
 } from 'react-native-gesture-handler';
-import { Alert, Dimensions, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
@@ -20,21 +28,39 @@ import { useThemedStyle } from '../../hooks/useThemedStyle';
 import { Eto } from './Eto';
 import { Wareki } from './Wareki';
 import { trimText } from '../../lib/feat/trimText';
+import { EditableChip } from './EditableChip';
+import { useTagStore } from '../../lib/store/tagStore';
+import { useEffect, useState } from 'react';
 
 interface ListItemProps extends Pick<PanGestureHandlerProps, 'simultaneousHandlers'> {
   friend: Friend;
   onDismiss?: (task: Friend) => void;
   onTap: () => void;
+  onTagTap: (tag: string) => void;
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const TRANSLATE_X_THRESHOLD = -SCREEN_WIDTH * 0.3;
 
-const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: ListItemProps) => {
+const SwipeableListItem = ({
+  friend,
+  onDismiss,
+  simultaneousHandlers,
+  onTap,
+  onTagTap,
+}: ListItemProps) => {
   const translateX = useSharedValue(0);
   const itemHeight = useSharedValue(ItemHeight);
   const marginVertical = useSharedValue(0);
   const opacity = useSharedValue(1);
+  const { tags } = useTagStore();
+  const [friendTags, setFriendTags] = useState(
+    tags.filter((tag) => friend.tagIds.includes(tag.id))
+  );
+
+  useEffect(() => {
+    setFriendTags(tags.filter((tag) => friend.tagIds.includes(tag.id)));
+  }, [tags, friend.tagIds]);
 
   const { textStyle, viewBackgroundColorStyle, lightViewBackgroundColorStyle } = useThemedStyle();
 
@@ -124,10 +150,33 @@ const SwipeableListItem = ({ friend, onDismiss, simultaneousHandlers, onTap }: L
                 <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
                 <Eto year={friend.birthYear} />
               </View>
-              <View style={{ width: '95%', height: 40 }}>
-                <Text style={[textStyle]}>{trimText(friend.memo, 45)}</Text>
+              <View style={{ width: '95%', height: 20 }}>
+                <Text style={[textStyle]} numberOfLines={1} ellipsizeMode="tail">
+                  {trimText(friend.memo, 25)}
+                </Text>
               </View>
+              <ScrollView
+                style={styles.tagList}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                {friendTags.map((tag) => {
+                  return (
+                    <View style={{ marginHorizontal: 6 }} key={tag.id}>
+                      <EditableChip
+                        key={`${tag.id}-tag-chip`}
+                        label={tag.name}
+                        onPress={() => {
+                          onTagTap(tag.name);
+                        }}
+                        color={'#DCEDC8'}
+                      />
+                    </View>
+                  );
+                })}
+              </ScrollView>
             </View>
+
             <TouchableWithoutFeedback onPress={onTap}>
               <Entypo name="chevron-right" size={24} color="gray" />
             </TouchableWithoutFeedback>
@@ -183,6 +232,15 @@ const styles = StyleSheet.create({
     right: '10%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  memoText: {
+    fontSize: 12,
+    color: 'gray',
+    flexShrink: 1,
+  },
+  tagList: {
+    flexGrow: 0,
+    flexShrink: 1,
   },
 });
 

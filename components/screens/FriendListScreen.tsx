@@ -27,9 +27,12 @@ import { useThemedStyle } from '../../hooks/useThemedStyle';
 import { sortFriendAndHeaderList } from '../../lib/feat/sort';
 import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListItem';
 import { AdmobBanner } from '../UIParts/AdmobBanner';
+import { useTagStore } from '../../lib/store/tagStore';
 
 const FriendListScreen = () => {
   const { friends, setFriends } = useFriendStore();
+  const { tags } = useTagStore();
+
   const [filteredFriends, setFilteredFriends] = useState<Friend[]>(friends);
   const [friendsAndHeaders, setFriendsAndHeaders] = useState<Array<Friend | HeaderListItem>>([]);
   const [searchText, setSearchText] = useState('');
@@ -58,9 +61,23 @@ const FriendListScreen = () => {
   }, [filteredFriends]);
 
   useEffect(() => {
+    if (searchText === '') {
+      setFilteredFriends(friends);
+      return;
+    }
     setFilteredFriends(
       friends.filter((friend) => {
-        return friend.name.includes(searchText) || friend.memo.includes(searchText);
+        const friendTagNames = friend.tagIds.map((tagId) => {
+          const tag = tags.find((tag) => tag.id === tagId);
+          if (tag?.name) {
+            return tag.name;
+          }
+        });
+        return (
+          friend.name.includes(searchText) ||
+          friend.memo.includes(searchText) ||
+          friendTagNames.some((tagName) => tagName?.includes(searchText))
+        );
       })
     );
   }, [searchText]);
@@ -128,6 +145,10 @@ const FriendListScreen = () => {
     router.push({ pathname: '/(tabs)/register', params: { id: friend.id } });
   }, []);
 
+  const onTagTap = useCallback((tag: string) => {
+    setSearchText(tag);
+  }, []);
+
   return (
     <SafeAreaView style={[localStyles.container, lightViewBackgroundColorStyle]}>
       <>
@@ -138,6 +159,7 @@ const FriendListScreen = () => {
             onChangeText={(text) => {
               onChangeSearchText(text);
             }}
+            value={searchText}
             placeholder={i18n.t('birthdayList.searchPlaceholder')}
           />
         </View>
@@ -221,6 +243,7 @@ const FriendListScreen = () => {
               onTap={() => {
                 onEditButtonPress(friend);
               }}
+              onTagTap={onTagTap}
               key={friend.id}
             />
           );
