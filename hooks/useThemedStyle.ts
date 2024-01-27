@@ -87,7 +87,7 @@ const localStyles = StyleSheet.create({
   },
 
   textInput: {
-    height: 40,
+    height: 42,
     fontSize: 16,
     width: '100%',
     paddingHorizontal: 8,
@@ -102,7 +102,7 @@ const localStyles = StyleSheet.create({
   },
 
   iconBackgroundColor: {
-    backgroundColor: '#BDBDBD',
+    backgroundColor: '#F5F5F5',
   },
   darkIconBackgroundColor: {
     backgroundColor: '#333',

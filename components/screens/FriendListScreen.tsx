@@ -26,7 +26,7 @@ import { useFriendStore } from '../../lib/store/friendStore';
 import { useThemedStyle } from '../../hooks/useThemedStyle';
 import { sortFriendAndHeaderList } from '../../lib/feat/sort';
 import { type HeaderListItem, isHeader } from '../../lib/interfaces/headerListItem';
-import { AdmobNativeAdvance } from '../UIParts/AdmobNativeAdvance';
+import { AdmobBanner } from '../UIParts/AdmobBanner';
 
 const FriendListScreen = () => {
   const { friends, setFriends } = useFriendStore();
@@ -179,6 +179,9 @@ const FriendListScreen = () => {
         </Animated.ScrollView>
         <Animated.View style={rIndicatorStyle} />
       </>
+      <View style={{ justifyContent: 'center', alignItems: 'center', marginVertical: 10 }}>
+        <AdmobBanner />
+      </View>
       <FlatList
         onScroll={(e) => {
           contentOffsetY.value = e.nativeEvent.contentOffset.y;
@@ -223,7 +226,7 @@ const FriendListScreen = () => {
           );
         }}
       />
-      <AdmobNativeAdvance />
+
       <BottomFloatingButton
         onSelect={onAddButtonPress}
         style={[
