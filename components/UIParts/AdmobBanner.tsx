@@ -12,6 +12,9 @@ const EmptyBannerAd = () => {
   );
 };
 const AdmobBanner = () => {
+  if (__DEV__) {
+    return <></>;
+  }
   return (
     <BannerAd
       unitId={adUnitId}
@@ -35,7 +38,7 @@ const styles = StyleSheet.create({
   },
   bannerAd: {
     ...BANNER_SIZE,
-    backgroundColor: 'gray',
+    backgroundColor: '#424242',
   },
 });
 
