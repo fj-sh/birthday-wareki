@@ -18,3 +18,12 @@
 npx expo start --clear --tunnel
 maestro test ./e2e/sample.yml
 ```
+
+## ビルド
+
+```shell
+eas build:configure
+eas build -p ios
+eas submit
+eas submit -p ios --latest --profile production
+```
