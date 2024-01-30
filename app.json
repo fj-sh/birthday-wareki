@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "wareki-birthday",
+    "name": "和暦バースデー",
     "slug": "wareki-birthday",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -24,6 +24,9 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
+    },
+    "locales": {
+      "ja": "./languages/ja.json"
     },
     "web": {
       "bundler": "metro",
