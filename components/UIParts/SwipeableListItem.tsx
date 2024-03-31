@@ -142,45 +142,44 @@ const SwipeableListItem = ({
 
       <PanGestureHandler simultaneousHandlers={simultaneousHandlers} onGestureEvent={panGesture}>
         <Animated.View style={[styles.friend, rStyle, viewBackgroundColorStyle]}>
-          <View style={styles.contentAndIconContainer}>
-            <View style={styles.contentContainer}>
-              <Text style={[styles.friendTitle, textStyle]}>{friend.name}</Text>
-              <BirthdayText friend={friend} />
-              <View style={{ flexDirection: 'row', gap: 10 }}>
-                <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
-                <Eto year={friend.birthYear} />
+          <TouchableWithoutFeedback onPress={onTap}>
+            <View style={styles.contentAndIconContainer}>
+              <View style={styles.contentContainer}>
+                <Text style={[styles.friendTitle, textStyle]}>{friend.name}</Text>
+                <BirthdayText friend={friend} />
+                <View style={{ flexDirection: 'row', gap: 10 }}>
+                  <Wareki year={friend.birthYear} month={friend.birthMonth} day={friend.birthDay} />
+                  <Eto year={friend.birthYear} />
+                </View>
+                <View style={{ width: '95%', height: 20 }}>
+                  <Text style={[textStyle]} numberOfLines={1} ellipsizeMode="tail">
+                    {trimText(friend.memo, 25)}
+                  </Text>
+                </View>
+                <ScrollView
+                  style={styles.tagList}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                >
+                  {friendTags.map((tag) => {
+                    return (
+                      <View style={{ marginHorizontal: 6 }} key={tag.id}>
+                        <EditableChip
+                          key={`${tag.id}-tag-chip`}
+                          label={tag.name}
+                          onPress={() => {
+                            onTagTap(tag.name);
+                          }}
+                          color={'#DCEDC8'}
+                        />
+                      </View>
+                    );
+                  })}
+                </ScrollView>
               </View>
-              <View style={{ width: '95%', height: 20 }}>
-                <Text style={[textStyle]} numberOfLines={1} ellipsizeMode="tail">
-                  {trimText(friend.memo, 25)}
-                </Text>
-              </View>
-              <ScrollView
-                style={styles.tagList}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-              >
-                {friendTags.map((tag) => {
-                  return (
-                    <View style={{ marginHorizontal: 6 }} key={tag.id}>
-                      <EditableChip
-                        key={`${tag.id}-tag-chip`}
-                        label={tag.name}
-                        onPress={() => {
-                          onTagTap(tag.name);
-                        }}
-                        color={'#DCEDC8'}
-                      />
-                    </View>
-                  );
-                })}
-              </ScrollView>
-            </View>
-
-            <TouchableWithoutFeedback onPress={onTap}>
               <Entypo name="chevron-right" size={24} color="gray" />
-            </TouchableWithoutFeedback>
-          </View>
+            </View>
+          </TouchableWithoutFeedback>
         </Animated.View>
       </PanGestureHandler>
     </Animated.View>
